@@ -618,12 +618,12 @@
         "id": {
           "type": "integer"
         },
-        "ayahs":{
+        "ayahs": {
           "$ref": "#/definitions/Ayah"
         }
       }
     },
-    "contest": {
+    "Contest": {
       "type": "object",
       "properties": {
         "id": {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Contest;
+use App\Models\ContestMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,6 +28,10 @@ class ContestController extends APIController
             return $this->errorResponse(($validator->errors()->all()));
         }
 
+        if (count(fauth()->user()->contest) > 0) {
+            return $this->errorResponse(['You have to get out from current contest']);
+        }
+
         $contest = Contest::create([
             'name' => $request->get('name'),
             'goal' => $request->get('goal'),
@@ -35,8 +40,69 @@ class ContestController extends APIController
             'user_id' => fauth()->id()
         ]);
 
-        $contest->load(['creator','winner']);
+        $contest->load(['creator', 'winner']);
 
-        return $this->response(['contest' => $contest,'message'=>['Contest created successfully']]);
+        ContestMember::create([
+            'contest_id' => $contest->id,
+            'member_id' => fauth()->id()
+        ]);
+
+        return $this->response(['contest' => $contest, 'message' => ['Contest created successfully']]);
     }
+
+
+    /**
+     * POST /contests/join
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function join(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'contest_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(($validator->errors()->all()));
+        }
+
+        $contest = Contest::where('id', $request->get('contest_id'))->first();
+
+        if ($contest->is_expired) {
+            return $this->errorResponse(['Ooh  you can\'t join in this contest because it is expired']);
+        }
+
+        if (count(fauth()->user()->contest) > 0) {
+            return $this->errorResponse(['You have to get out from current contest']);
+        }
+
+        ContestMember::create([
+            'contest_id' => $request->get('contest_id'),
+            'member_id' => fauth()->id()
+        ]);
+
+        return $this->response(['You join to contest successfully']);
+    }
+
+
+    /**
+     *
+     */
+    public function leave(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'contest_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(($validator->errors()->all()));
+        }
+
+        $result=ContestMember::where(['contest_id' => $request->get('contest_id'), 'member_id' => fauth()->id()]);
+
+//        dd($result);
+
+    }
+
 }
