@@ -13,6 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/auth','API\AuthController@login');
+
+Route::post('/register','API\AuthController@register');
+
+
+Route::group(["middleware" => ['api-auth']], function ($router) {
+    Route::post('/profile/update','API\AuthController@update');
+
+
+    Route::get('/profile/token_reset','API\AuthController@tokenReset');
 });
+
+

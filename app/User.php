@@ -2,12 +2,11 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Media;
 
-class User extends Authenticatable
+
+class User extends \Dot\Users\Models\User
 {
-    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password'
     ];
 
     /**
@@ -24,6 +23,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', "api_token", "username", "code", "backend", "root"
     ];
+
+
+    /**
+     * Photo relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function photo()
+    {
+        return $this->hasOne(Media::class, 'id', 'photo_id');
+    }
+
 }
