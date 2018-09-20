@@ -19,6 +19,7 @@ Route::post('/register','API\AuthController@register');
 
 Route::get('/page', 'API\PageController@show');
 Route::get('/ayah', 'API\AyatController@show');
+Route::get('/surah', 'API\SuratController@show');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
