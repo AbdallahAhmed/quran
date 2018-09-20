@@ -19,6 +19,10 @@
     {
       "name": "User",
       "description": "Authentication and Users Api"
+    },
+    {
+      "name": "Contests",
+      "description": "Contests Api"
     }
   ],
   "schemes": [
@@ -242,6 +246,70 @@
         }
       }
     },
+    "/contests/create": {
+      "post": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Create contests",
+        "description": "Create contests",
+        "operationId": "contests.create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client Login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "required": true
+                },
+                "goal": {
+                  "type": "string",
+                  "required": true,
+                  "minimum": "9"
+                },
+                "start_at": {
+                  "type": "string",
+                  "required": true,
+                  "example":"2018-09-19 14:43:19"
+                },
+                "expired_at": {
+                  "type": "string",
+                  "required": true,
+                  "example":"2018-09-19 14:43:19"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/User"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ayah":{
       "get":{
         "tags": [
@@ -288,7 +356,7 @@
         }
       }
     }
-  },
+    },
   "definitions": {
     "User": {
       "type": "object",
@@ -430,6 +498,38 @@
         },
         "numberOfAyats": {
           "type": "integer"
+        }
+      }
+    },
+    "contest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string"
+        },
+        "start_at": {
+          "type": "string"
+        },
+        "expired_at": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "winner_id": {
+          "type": "integer"
+        },
+        "creator": {
+          "$ref": "#/definitions/User"
+        },
+        "winner": {
+          "$ref": "#/definitions/User"
         }
       }
     }

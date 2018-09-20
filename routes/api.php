@@ -21,10 +21,14 @@ Route::get('/page', 'API\PageController@show');
 Route::get('/ayah', 'API\AyatController@show');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
-    Route::post('/profile/update','API\AuthController@update');
+
+    // profile
+    $router->post('/profile/update','API\AuthController@update');
+    $router->get('/profile/token_reset','API\AuthController@tokenReset');
 
 
-    Route::get('/profile/token_reset','API\AuthController@tokenReset');
+    // contests
+    $router->post('contests/create','API\ContestController@create');
 });
 
 
