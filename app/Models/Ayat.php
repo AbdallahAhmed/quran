@@ -8,8 +8,8 @@ class Ayat extends Model
 {
     protected $table = 'ayat';
 
-    public function surat(){
-        return $this->belongsTo(Surat::class);
+    public function surah(){
+        return $this->belongsTo(Surat::class, 'surat_id');
     }
 
     public function juz(){

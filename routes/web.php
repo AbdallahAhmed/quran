@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/ayah/{id}', ['uses' => 'API\AyatController@show']);
