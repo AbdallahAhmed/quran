@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Contest;
 use App\Models\Media;
 
 
@@ -34,6 +35,25 @@ class User extends \Dot\Users\Models\User
     public function photo()
     {
         return $this->hasOne(Media::class, 'id', 'photo_id');
+    }
+
+    /**
+     * contests relations
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function contests()
+    {
+        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id');
+    }
+
+
+    /**
+     * Current contest joined and opened
+     * @return mixed
+     */
+    public function contest()
+    {
+        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->opened();
     }
 
 }

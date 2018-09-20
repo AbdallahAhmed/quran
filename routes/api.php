@@ -13,20 +13,24 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/auth','API\AuthController@login');
+Route::post('/auth', 'API\AuthController@login');
 
-Route::post('/register','API\AuthController@register');
+Route::post('/register', 'API\AuthController@register');
 
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // profile
-    $router->post('/profile/update','API\AuthController@update');
-    $router->get('/profile/token_reset','API\AuthController@tokenReset');
+    $router->post('/profile/update', 'API\AuthController@update');
+    $router->get('/profile/token_reset', 'API\AuthController@tokenReset');
 
 
     // contests
-    $router->post('contests/create','API\ContestController@create');
+    $router->post('contests/create', 'API\ContestController@create');
+
+    $router->post('contests/join', 'API\ContestController@join');
+
+    $router->post('contests/leave', 'API\ContestController@leave');
 });
 
 

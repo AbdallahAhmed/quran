@@ -298,10 +298,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user": {
-                  "$ref": "#/definitions/User"
+                "contest": {
+                  "$ref": "#/definitions/Contest"
                 },
-                "token": {
+                "message": {
                   "type": "string"
                 }
               }
@@ -309,7 +309,7 @@
           }
         }
       }
-    },
+    }
   },
   "definitions": {
     "User": {
@@ -406,7 +406,7 @@
         }
       }
     },
-    "contest": {
+    "Contest": {
       "type": "object",
       "properties": {
         "id": {
