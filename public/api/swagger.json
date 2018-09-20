@@ -355,6 +355,117 @@
           }
         }
       }
+    },
+    "/surah":{
+      "get":{
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Surah",
+        "description": "Retrieve Specific Surah",
+        "operationId": "surah",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name":"query",
+            "description": "Retrieve Specific Surah",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah_id": {
+                  "type": "integer",
+                  "required": true
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "surah": {
+                  "$ref": "#/definitions/Surah"
+                },
+                "ayat":{
+                  "$ref": "#/definitions/Ayah"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/page":{
+      "get":{
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Page",
+        "description": "Retrieve Specific Page",
+        "operationId": "page",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name":"query",
+            "description": "Retrieve Specific Page",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "page_id": {
+                  "type": "integer",
+                  "required": true
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "$ref": "#/definitions/Page"
+                }
+              }
+            }
+          }
+        }
+      }
     }
     },
   "definitions": {
@@ -498,6 +609,17 @@
         },
         "numberOfAyats": {
           "type": "integer"
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ayahs":{
+          "$ref": "#/definitions/Ayah"
         }
       }
     },

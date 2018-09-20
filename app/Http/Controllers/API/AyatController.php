@@ -14,7 +14,7 @@ class AyatController extends APIController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function index(Request $request)
     {
         $id = $request->get('ayah_id');
         $ayah = Ayat::find($id);
