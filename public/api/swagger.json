@@ -29,7 +29,7 @@
     "api_key": {
       "type": "apiKey",
       "name": "api_token",
-      "in": "query"
+      "in": "header"
     }
   },
   "paths": {
@@ -214,7 +214,7 @@
       }
     },
     "/profile/token_reset": {
-      "post": {
+      "get": {
         "tags": [
           "User"
         ],
@@ -235,6 +235,52 @@
               "properties": {
                 "token": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ayah":{
+      "get":{
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Ayah",
+        "description": "Retrieve Specific Ayah",
+        "operationId": "ayah",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name":"query",
+            "description": "Retrieve Specific Ayah",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah_id": {
+                  "type": "integer",
+                  "required": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah": {
+                  "$ref": "#/definitions/Ayah"
                 }
               }
             }
@@ -335,6 +381,55 @@
         },
         "updated_at": {
           "type": "string"
+        }
+      }
+    },
+    "Ayah": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "number": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "hizbQuarter": {
+          "type": "string"
+        },
+        "numberInSurah": {
+          "type": "string"
+        },
+        "sajda": {
+          "type": "boolean"
+        },
+        "surah":{
+          "$ref":"#/definitions/Surah"
+        }
+      }
+    },
+    "Surah": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "integer"
+        },
+        "englishname": {
+          "type": "string"
+        },
+        "englishtranslation": {
+          "type": "string"
+        },
+        "revelationCity": {
+          "type": "string"
+        },
+        "numberOfAyats": {
+          "type": "integer"
         }
       }
     }
