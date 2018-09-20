@@ -9,26 +9,20 @@ use App\Http\Controllers\Controller;
 
 class AyatController extends APIController
 {
-    public function show($id){
-
-        $ayah = Ayat::where([
-            ['id','=', $id],
-            ['edition_id', '=', 77]
-        ])->first();
-        if($ayah){
-            $data = array();
-            $data['number'] = $ayah->number;
-            $data['text'] = $ayah->text;
-            $data['surah'] = $ayah->surah;
-            $data['juz'] = $ayah->juz;
-            $data['page'] = $ayah->page;
-            $data['hizbQuarter'] = $ayah->hizbQuarter_id;
-            $data['numberInSurah'] = $ayah->numberinsurat;
-            $data['sajda'] = $ayah->sajda_id ? true : false;
-
-            return $this->response($data, true, 200);
-        }else{
-            return $this->errorResponse(['Ayah Not Found'], 400);
+    /**
+     * GET /ayah
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Request $request)
+    {
+        $id = $request->get('ayah_id');
+        $ayah = Ayat::find($id);
+        $ayah->load('surah');
+        if ($ayah) {
+            return $this->response(['ayah' => $ayah]);
+        } else {
+            return $this->errorResponse(['Ayah Not Found']);
         }
     }
 }

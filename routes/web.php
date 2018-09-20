@@ -12,3 +12,4 @@
 */
 
 Route::get('/ayah/{id}', ['uses' => 'API\AyatController@show']);
+Route::get('/page', ['uses' => 'API\PageController@show']);

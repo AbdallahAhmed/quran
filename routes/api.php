@@ -17,6 +17,8 @@ Route::post('/auth', 'API\AuthController@login');
 
 Route::post('/register', 'API\AuthController@register');
 
+Route::get('/page', 'API\PageController@show');
+Route::get('/ayah', 'API\AyatController@show');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
