@@ -43,8 +43,4 @@ class Ayat extends Model
     }
 
 
-    public function  getXAttribute(){
-        return 'x';
-    }
-
 }
