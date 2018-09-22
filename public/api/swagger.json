@@ -326,7 +326,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "body",
             "name":"query",
             "description": "Retrieve Specific Ayah",
             "required": true,
@@ -335,7 +335,8 @@
               "properties": {
                 "ayah_id": {
                   "type": "integer",
-                  "required": true
+                  "required": true,
+                  "example": 473938
                 }
               }
             }
@@ -381,15 +382,18 @@
               "properties": {
                 "ayah_id": {
                   "type": "integer",
-                  "required": true
+                  "required": true,
+                  "example": 473938
                 },
                 "offset": {
                   "type": "integer",
-                  "required": false
+                  "required": false,
+                  "example": 5
                 },
                 "limit": {
                   "type": "integer",
-                  "required": false
+                  "required": false,
+                  "example": 10
                 }
               }
             }
@@ -438,15 +442,18 @@
               "properties": {
                 "page_id": {
                   "type": "integer",
-                  "required": true
+                  "required": true,
+                  "example": 102
                 },
                 "offset": {
                   "type": "integer",
-                  "required": false
+                  "required": false,
+                  "example": 10
                 },
                 "limit": {
                   "type": "integer",
-                  "required": false
+                  "required": false,
+                  "example": 10
                 }
               }
             }
@@ -460,6 +467,127 @@
               "properties": {
                 "page": {
                   "$ref": "#/definitions/Page"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/juz":{
+      "get":{
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Juz",
+        "description": "Retrieve Specific Juz",
+        "operationId": "juz",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name":"query",
+            "description": "Retrieve Specific Page",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "juz_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 29
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "surat": {
+                  "type": "array",
+                  "$ref": "#/definitions/Surah"
+                },
+                "ayat":{
+                  "$ref": "#/definitions/Ayah"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search":{
+      "get":{
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Returns ayahs that match a keyword",
+        "description": "Returns ayahs that match a keyword",
+        "operationId": "search",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name":"query",
+            "description": "Returns ayahs that match a keyword",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "required": true,
+                  "example": "النحل"
+                },
+                "limit":{
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                },
+                "offset":{
+                  "type": "integer",
+                  "required": false,
+                  "example": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayat": {
+                  "$ref": "#/definitions/Ayah"
+                },
+                "count":{
+                  "type": "string"
                 }
               }
             }
@@ -596,7 +724,7 @@
           "type": "integer"
         },
         "name": {
-          "type": "integer"
+          "type": "string"
         },
         "englishname": {
           "type": "string"
@@ -620,6 +748,20 @@
         },
         "ayahs": {
           "$ref": "#/definitions/Ayah"
+        }
+      }
+    },
+    "Juz": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ayat": {
+          "$ref": "#/definitions/Ayah"
+        },
+        "surat":{
+          "$ref": "#/definitions/Surah"
         }
       }
     },
