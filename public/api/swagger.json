@@ -373,7 +373,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "body",
             "name":"query",
             "description": "Retrieve Specific Surah",
             "required": true,
@@ -433,7 +433,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "body",
             "name":"query",
             "description": "Retrieve Specific Page",
             "required": true,
@@ -490,7 +490,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "body",
             "name":"query",
             "description": "Retrieve Specific Page",
             "required": true,
@@ -551,7 +551,7 @@
         ],
         "parameters": [
           {
-            "in": "query",
+            "in": "body",
             "name":"query",
             "description": "Returns ayahs that match a keyword",
             "required": true,
