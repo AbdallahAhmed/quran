@@ -11,6 +11,10 @@ use App\Http\Controllers\Controller;
 class BookmarkController extends APIController
 {
 
+    /**
+     * GET /bookmarks
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(){
         $bookmarks = UserAyat::where('user_id', fauth()->id())->get();
         $ayat = array();
@@ -20,6 +24,12 @@ class BookmarkController extends APIController
         }
         return $this->response(['ayat' => $ayat]);
     }
+
+    /**
+     * POST /bookmarks/create
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request){
         $ayah_id = $request->get('ayah_id');
         $bookmark = UserAyat::where([
@@ -37,6 +47,11 @@ class BookmarkController extends APIController
         }
     }
 
+    /**
+     * POST /bookmarks/delete
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request){
         $ayah_id = $request->get('ayah_id');
         UserAyat::where([
@@ -45,7 +60,10 @@ class BookmarkController extends APIController
         ])->delete();
         return $this->response(['message' => "Deleted Successfully"]);
     }
-
+    /**
+     * POST /bookmarks/clear
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function clear(){
         UserAyat::where('user_id', fauth()->id())->delete();
         return $this->response(['message' => "Deleted Successfully"]);

@@ -40,7 +40,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
 
     $router->get('bookmarks', 'API\BookmarkController@index');
 
-    $router->post('bookmarks/save', 'API\BookmarkController@create');
+    $router->post('bookmarks/create', 'API\BookmarkController@create');
 
     $router->post('bookmarks/delete', 'API\BookmarkController@delete');
 

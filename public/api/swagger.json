@@ -1079,7 +1079,7 @@
         "id": {
           "type": "integer"
         },
-        "ayahs": {
+        "ayat": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Ayah"
@@ -1094,10 +1094,16 @@
           "type": "integer"
         },
         "ayat": {
+          "type": "array",
+          "items":{
           "$ref": "#/definitions/Ayah"
+          }
         },
         "surat": {
-          "$ref": "#/definitions/Surah"
+          "type": "array",
+          "items":{
+            "$ref": "#/definitions/Surah"
+          }
         }
       }
     },
