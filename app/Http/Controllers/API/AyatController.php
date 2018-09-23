@@ -38,7 +38,7 @@ class AyatController extends APIController
         $offset = $request->get('offset', 0);
 
         $ayat = array();
-        $ayats = Ayat::where('text', 'like', '%' . $q . '%')
+        $ayats = Ayat::where('text', 'like', '%' . $q )
             ->withoutGlobalScopes()
             ->offset($offset)
             ->limit($limit)
