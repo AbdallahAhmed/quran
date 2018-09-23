@@ -23,6 +23,9 @@ Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
 Route::get('/juz', 'API\JuzController@index');
 
+
+Route::get('/contests', 'API\ContestController@index');
+
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // profile
@@ -32,9 +35,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // contests
     $router->post('contests/create', 'API\ContestController@create');
-
     $router->post('contests/join', 'API\ContestController@join');
-
     $router->post('contests/leave', 'API\ContestController@leave');
 
     $router->get('bookmarks', 'API\BookmarkController@index');

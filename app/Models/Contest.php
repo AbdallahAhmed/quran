@@ -15,7 +15,7 @@ class Contest extends Model
      *
      * @var array
      */
-    protected $appends=['is_expired'];
+    protected $appends = ['is_expired', 'is_joined', 'member_counter', 'is_opened'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -89,11 +89,49 @@ class Contest extends Model
     }
 
     /**
-     *  Add is expired property
+     *  Add is_expired property
      * @return bool
      */
     public function getIsExpiredAttribute()
     {
         return $this->expired_at < Carbon::now();
     }
+
+    /**
+     *  Add is_expired property
+     * @return bool
+     */
+    public function getIsOpenedAttribute()
+    {
+        return $this->expired_at >= Carbon::now() && $this->start_at <= Carbon::now();
+    }
+
+
+    /**
+     *  Add member_counter property
+     * @return bool
+     */
+    public function getMemberCounterAttribute()
+    {
+        return $this->members()->count();
+    }
+
+    /**
+     *  Add is_joined property
+     * @return bool
+     */
+    public function getIsJoinedAttribute()
+    {
+        return $this->members()->where('users.id', fauth()->id())->count() ? true : false;
+    }
+
+    /**
+     * members relations
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id');
+    }
+
 }
