@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/auth', 'API\AuthController@login');
+Route::get('/auth/resendCode', 'API\AuthController@resendCode');
+Route::post('/auth/verify', 'API\AuthController@verify');
 
 Route::post('/register', 'API\AuthController@register');
 
@@ -22,7 +24,6 @@ Route::get('/ayah', 'API\AyatController@index');
 Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
 Route::get('/juz', 'API\JuzController@index');
-
 
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');

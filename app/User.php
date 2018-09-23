@@ -10,6 +10,13 @@ use Illuminate\Support\Carbon;
 class User extends \Dot\Users\Models\User
 {
 
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['photo'];
     /**
      * The attributes that are mass assignable.
      *
@@ -54,7 +61,7 @@ class User extends \Dot\Users\Models\User
      */
     public function contest()
     {
-        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->where('expired_at','>=',Carbon::now());
+        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->where('expired_at', '>=', Carbon::now());
     }
 
 }

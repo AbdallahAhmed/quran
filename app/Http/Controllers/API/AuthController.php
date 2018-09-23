@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Mail\VerificationMail;
+use App\Mail\WelcomeMail;
 use App\Models\Media;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends APIController
@@ -98,7 +101,8 @@ class AuthController extends APIController
         $user->last_name = isset($names[1]) ? $names[1] : '';
         $user->api_token = str_random(60);
         $user->backend = 0;
-        $user->status = 1;
+        $user->status = 0;
+        $user->code = generateCode();
         $user->lang = $request->get('lang', 'ar');
         if ($imageData) {
             $media = $media->saveContent($imageData);
@@ -107,7 +111,54 @@ class AuthController extends APIController
         $user->role_id = 2;
         $user->save();
         $user->load('photo');
+        Mail::to($user->email)->send(new VerificationMail($user));
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
+    }
+
+
+    /**
+     * GET /auth/resendCode
+     */
+    public function resendCode()
+    {
+        if (fauth()->user()) {
+            $user = fauth()->user();
+            if (!$user->code) {
+                $user->code = generateCode();
+                $user->save();
+            }
+            Mail::to($user->email)->send(new VerificationMail($user));
+            return $this->response(['message' => 'email sent']);
+        } else {
+            return $this->errorResponse(['Api token  missing']);
+        }
+    }
+
+
+    /**
+     * GET /auth/verify
+     */
+    public function verify(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'code' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return $this->errorResponse(($validator->errors()->all()));
+        }
+
+        if (fauth()->user()) {
+            $user = fauth()->user();
+            $user->code = null;
+            $user->status = 1;
+            $user->save();
+            Mail::to($user->email)->send(new WelcomeMail($user));
+            return $this->response(['message' => 'Verification Completed']);
+        } else {
+            return $this->errorResponse(['Api token  missing']);
+        }
     }
 
 

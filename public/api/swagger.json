@@ -90,6 +90,82 @@
         }
       }
     },
+    "/auth/resendCode": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Resend Code Message",
+        "description": "Resend Code Message",
+        "operationId": "auth.resend",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "email sentز"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Mail Verify",
+        "description": "Mail Verify",
+        "operationId": "auth.verify",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client Login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Verification Completed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/register": {
       "post": {
         "tags": [
@@ -337,8 +413,8 @@
               "type": "object",
               "properties": {
                 "contest": {
-                    "$ref": "#/definitions/Contest"
-                  }
+                  "$ref": "#/definitions/Contest"
+                }
               }
             }
           }
