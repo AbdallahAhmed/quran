@@ -826,6 +826,177 @@
           }
         }
       }
+    },
+    "/bookmarks": {
+      "get": {
+        "tags": [
+          "Bookmarks"
+        ],
+        "summary": "List bookmarks for user",
+        "description": "list bookmarks for user",
+        "operationId": "bookmarks",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "List bookmarks for user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayat": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Ayah"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookmarks/create": {
+      "post": {
+        "tags": [
+          "Bookmarks"
+        ],
+        "summary": "Save new bookmark for user",
+        "description": "Save new bookmark for user",
+        "operationId": "bookmark.create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Save new bookmark for user",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 473938
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookmarks/delete": {
+      "post": {
+        "tags": [
+          "Bookmarks"
+        ],
+        "summary": "Delete bookmark for user",
+        "description": "Delete bookmark for user",
+        "operationId": "bookmark.delete",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Delete bookmark for user",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 473938
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookmarks/clear": {
+      "post": {
+        "tags": [
+          "Bookmarks"
+        ],
+        "summary": "Clear bookmarks for user",
+        "description": "Clear bookmarks for user",
+        "operationId": "bookmark.clear",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Clear bookmarks for user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -943,6 +1114,9 @@
         },
         "sajda": {
           "type": "boolean"
+        },
+        "page_id": {
+          "type": "integer"
         },
         "surah": {
           "$ref": "#/definitions/Surah"
