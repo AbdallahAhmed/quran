@@ -120,7 +120,7 @@ class ContestController extends APIController
         $limit = $request->get('limit', 8);
         $offset = $request->get('offset', 0);
 
-        $query = Contest::with(['creator','winner'])->take($limit)->offset($offset);
+        $query = Contest::with(['creator', 'winner'])->take($limit)->offset($offset);
 
         if ($request->filled('status')) {
             switch ($request->get('status')) {
@@ -144,4 +144,35 @@ class ContestController extends APIController
         return $this->response(['contests' => $contests]);
     }
 
+
+    /**
+     * GET /contests/details
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function details(Request $request)
+    {
+        $contest = Contest::with(['creator', 'winner', 'members'])->where('id', $request->query('contest_id'))->first();
+        if (!$contest) {
+            return $this->errorResponse(['Contest not founded'], 404);
+        }
+        return $this->response(['contest' => $contest]);
+    }
+
+
+    /**
+     * GET /contests/current
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function current(Request $request)
+    {
+
+        $contest = fauth()->user()->contest;
+        if (count($contest) > 0) {
+            $contest[0]->load(['creator','winner']);
+            return $this->response(['contest' => $contest[0]]);
+        }
+        return $this->errorResponse(['You are not joined to any opened Contests']);
+    }
 }

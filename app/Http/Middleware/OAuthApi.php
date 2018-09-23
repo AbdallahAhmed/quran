@@ -26,7 +26,9 @@ class OAuthApi
             return response('Unauthorized.', 401);
         }
 
-
+        if (fauth()->user()->status == 0) {
+            return response()->json(['errors' => ['Please Verify you account']], 401);
+        }
 
         return $next($request);
     }
