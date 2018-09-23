@@ -28,6 +28,7 @@ Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
 Route::get('/juz', 'API\JuzController@index');
 
+
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
@@ -46,7 +47,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // bookmarks
     $router->get('bookmarks', 'API\BookmarkController@index');
-    $router->post('bookmarks/save', 'API\BookmarkController@create');
+    $router->post('bookmarks/create', 'API\BookmarkController@create');
     $router->post('bookmarks/delete', 'API\BookmarkController@delete');
     $router->post('bookmarks/clear', 'API\BookmarkController@clear');
 });
