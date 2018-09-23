@@ -281,12 +281,12 @@
                 "start_at": {
                   "type": "string",
                   "required": true,
-                  "example":"2018-09-19 14:43:19"
+                  "example": "2018-09-19 14:43:19"
                 },
                 "expired_at": {
                   "type": "string",
                   "required": true,
-                  "example":"2018-09-19 14:43:19"
+                  "example": "2018-09-19 14:43:19"
                 }
               }
             }
@@ -310,8 +310,8 @@
         }
       }
     },
-    "/ayah":{
-      "get":{
+    "/ayah": {
+      "get": {
         "tags": [
           "AlQuran"
         ],
@@ -326,8 +326,8 @@
         ],
         "parameters": [
           {
-            "in": "query",
-            "name":"query",
+            "in": "body",
+            "name": "query",
             "description": "Retrieve Specific Ayah",
             "required": true,
             "schema": {
@@ -335,7 +335,8 @@
               "properties": {
                 "ayah_id": {
                   "type": "integer",
-                  "required": true
+                  "required": true,
+                  "example": 473938
                 }
               }
             }
@@ -355,8 +356,257 @@
           }
         }
       }
-    }
     },
+    "/surah": {
+      "get": {
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Surah",
+        "description": "Retrieve Specific Surah",
+        "operationId": "surah",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Retrieve Specific Surah",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayah_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 473938
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 5
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "surah": {
+                  "$ref": "#/definitions/Surah"
+                },
+                "ayat": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Ayah"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/page": {
+      "get": {
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Page",
+        "description": "Retrieve Specific Page",
+        "operationId": "page",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Retrieve Specific Page",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "page_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 102
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "page": {
+                  "$ref": "#/definitions/Page"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/juz": {
+      "get": {
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Retrieve Specific Juz",
+        "description": "Retrieve Specific Juz",
+        "operationId": "juz",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Retrieve Specific Page",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "juz_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 29
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "surat": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Surah"
+                  }
+                },
+                "ayat": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Ayah"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [
+          "AlQuran"
+        ],
+        "summary": "Returns ayahs that match a keyword",
+        "description": "Returns ayahs that match a keyword",
+        "operationId": "search",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Returns ayahs that match a keyword",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string",
+                  "required": true,
+                  "example": "النحل"
+                },
+                "limit": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 10
+                },
+                "offset": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ayat": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Ayah"
+                  }
+                },
+                "count": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "definitions": {
     "User": {
       "type": "object",
@@ -473,8 +723,8 @@
         "sajda": {
           "type": "boolean"
         },
-        "surah":{
-          "$ref":"#/definitions/Surah"
+        "surah": {
+          "$ref": "#/definitions/Surah"
         }
       }
     },
@@ -485,7 +735,7 @@
           "type": "integer"
         },
         "name": {
-          "type": "integer"
+          "type": "string"
         },
         "englishname": {
           "type": "string"
@@ -498,6 +748,34 @@
         },
         "numberOfAyats": {
           "type": "integer"
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ayahs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Ayah"
+          }
+        }
+      }
+    },
+    "Juz": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ayat": {
+          "$ref": "#/definitions/Ayah"
+        },
+        "surat": {
+          "$ref": "#/definitions/Surah"
         }
       }
     },

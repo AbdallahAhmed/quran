@@ -17,8 +17,11 @@ Route::post('/auth', 'API\AuthController@login');
 
 Route::post('/register', 'API\AuthController@register');
 
-Route::get('/page', 'API\PageController@show');
-Route::get('/ayah', 'API\AyatController@show');
+Route::get('/page', 'API\PageController@index');
+Route::get('/ayah', 'API\AyatController@index');
+Route::get('/search', 'API\AyatController@search');
+Route::get('/surah', 'API\SuratController@index');
+Route::get('/juz', 'API\JuzController@index');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 

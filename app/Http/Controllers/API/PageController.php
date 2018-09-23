@@ -16,7 +16,7 @@ class PageController extends APIController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request)
+    public function index(Request $request)
     {
 
         $id = $request->get('page_id');
