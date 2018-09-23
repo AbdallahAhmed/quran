@@ -87,22 +87,26 @@ class ContestController extends APIController
 
 
     /**
-     *
+     * POST /contests/leave
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function leave(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'contest_id' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->errorResponse(($validator->errors()->all()));
+        $contest = Contest::find($request->get('contest_id'));
+        if($contest->is_expired){
+            return $this->errorResponse(['This contest expires can\'t leave it.']);
         }
 
-        $result=ContestMember::where(['contest_id' => $request->get('contest_id'), 'member_id' => fauth()->id()]);
 
-//        dd($result);
+        $result = ContestMember::where(['contest_id' => $request->get('contest_id'), 'member_id' => fauth()->id()])->delete();
 
+
+        if ($result == 0) {
+            return $this->errorResponse(['You are not join in this contests']);
+        }
+
+        return $this->response(['message'=>'Leaving successfully']);
     }
 
 }

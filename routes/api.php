@@ -29,9 +29,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // contests
     $router->post('contests/create', 'API\ContestController@create');
-
     $router->post('contests/join', 'API\ContestController@join');
-
     $router->post('contests/leave', 'API\ContestController@leave');
 });
 
