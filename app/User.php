@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Contest;
 use App\Models\Media;
+use Illuminate\Support\Carbon;
 
 
 class User extends \Dot\Users\Models\User
@@ -48,12 +49,12 @@ class User extends \Dot\Users\Models\User
 
 
     /**
-     * Current contest joined and opened
+     * Current contest joined and opened or coming
      * @return mixed
      */
     public function contest()
     {
-        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->opened();
+        return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->where('expired_at','>=',Carbon::now());
     }
 
 }

@@ -25,6 +25,7 @@ Route::get('/juz', 'API\JuzController@index');
 
 
 Route::get('/contests', 'API\ContestController@index');
+Route::get('/contests/details', 'API\ContestController@details');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
@@ -37,6 +38,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
     $router->post('contests/create', 'API\ContestController@create');
     $router->post('contests/join', 'API\ContestController@join');
     $router->post('contests/leave', 'API\ContestController@leave');
+    $router->get('contests/current', 'API\ContestController@current');
 });
 
 

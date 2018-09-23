@@ -263,7 +263,7 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
+            "name": "query",
             "description": "Client Login",
             "required": true,
             "schema": {
@@ -295,6 +295,50 @@
                     "$ref": "#/definitions/Contest"
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/details": {
+      "get": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Contest details",
+        "description": "Contest details",
+        "operationId": "contests.details",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest_id": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest": {
+                    "$ref": "#/definitions/Contest"
+                  }
               }
             }
           }
@@ -358,6 +402,35 @@
                 },
                 "message": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/current": {
+      "get": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Retrieve the current contests ",
+        "description": "Retrieve the current contests ",
+        "operationId": "contests.current",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest": {
+                  "$ref": "#/definitions/Contest"
                 }
               }
             }
@@ -962,6 +1035,56 @@
         },
         "winner_id": {
           "type": "integer"
+        },
+        "creator": {
+          "$ref": "#/definitions/User"
+        },
+        "winner": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "ContestWithMembers": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string"
+        },
+        "start_at": {
+          "type": "string"
+        },
+        "expired_at": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "is_expired": {
+          "type": "boolean"
+        },
+        "is_joined": {
+          "type": "boolean"
+        },
+        "is_opened": {
+          "type": "boolean"
+        },
+        "member_counter": {
+          "type": "integer"
+        },
+        "winner_id": {
+          "type": "integer"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
         },
         "creator": {
           "$ref": "#/definitions/User"
