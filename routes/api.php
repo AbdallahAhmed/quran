@@ -23,6 +23,9 @@ Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
 Route::get('/juz', 'API\JuzController@index');
 
+
+Route::get('/contests', 'API\ContestController@index');
+
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
     // profile

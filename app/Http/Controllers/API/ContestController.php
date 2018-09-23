@@ -47,7 +47,7 @@ class ContestController extends APIController
             'member_id' => fauth()->id()
         ]);
 
-        return $this->response(['contest' => $contest, 'message' => ['Contest created successfully']]);
+        return $this->response(['contest' => $contest, 'message' => 'Contest created successfully']);
     }
 
 
@@ -94,7 +94,7 @@ class ContestController extends APIController
     public function leave(Request $request)
     {
         $contest = Contest::find($request->get('contest_id'));
-        if($contest->is_expired){
+        if ($contest->is_expired) {
             return $this->errorResponse(['This contest expires can\'t leave it.']);
         }
 
@@ -106,7 +106,42 @@ class ContestController extends APIController
             return $this->errorResponse(['You are not join in this contests']);
         }
 
-        return $this->response(['message'=>'Leaving successfully']);
+        return $this->response(['message' => 'Leaving successfully']);
+    }
+
+
+    /**
+     * GET /contests
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $limit = $request->get('limit', 8);
+        $offset = $request->get('offset', 0);
+
+        $query = Contest::with(['creator','winner'])->take($limit)->offset($offset);
+
+        if ($request->filled('status')) {
+            switch ($request->get('status')) {
+                case 'coming';
+                    $query = $query->coming();
+                    break;
+                case 'opened';
+                    $query = $query->opened();
+                    break;
+                case 'expired';
+                    $query = $query->expired();
+                    break;
+                case 'joined';
+                    $query = $query->whereHas('members', function ($query) {
+                        $query->where('members.id', fauth()->id());
+                    });
+                    break;
+            }
+        }
+        $contests = $query->get();
+        return $this->response(['contests' => $contests]);
     }
 
 }

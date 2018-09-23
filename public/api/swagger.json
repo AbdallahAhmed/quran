@@ -246,6 +246,61 @@
         }
       }
     },
+    "/contests": {
+      "get": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Contests Listing",
+        "description": "Contests Listing",
+        "operationId": "contests.index",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Client Login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "offset": {
+                  "type": "integer"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "coming|opened|expired|joined"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contests": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Contest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/contests/create": {
       "post": {
         "tags": [
@@ -298,10 +353,103 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user": {
-                  "$ref": "#/definitions/User"
+                "contest": {
+                  "$ref": "#/definitions/Contest"
                 },
-                "token": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/join": {
+      "post": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Join to contests",
+        "description": "Join to contests",
+        "operationId": "contests.join",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Join current user to contest id",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest": {
+                  "$ref": "#/definitions/Contest"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/leave": {
+      "post": {
+        "tags": [
+          "Contests"
+        ],
+        "summary": "Leave  contests",
+        "description": "Leave to contests",
+        "operationId": "contests.leave",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Leave current user to contest id",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contest_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
                   "type": "string"
                 }
               }
@@ -798,6 +946,18 @@
           "type": "string"
         },
         "user_id": {
+          "type": "integer"
+        },
+        "is_expired": {
+          "type": "boolean"
+        },
+        "is_joined": {
+          "type": "boolean"
+        },
+        "is_opened": {
+          "type": "boolean"
+        },
+        "member_counter": {
           "type": "integer"
         },
         "winner_id": {
