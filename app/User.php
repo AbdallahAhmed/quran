@@ -66,11 +66,19 @@ class User extends \Dot\Users\Models\User
     }
 
     /**
-     * contests relations
+     * CompletedKhatemas relations
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function khatemas(){
-        return $this->hasMany(Khatema::class, 'user_id', 'khatema_id');
+    public function CompletedKhatemas(){
+        return $this->hasMany(Khatema::class)->where('completed', 1);
+    }
+
+    /**
+     * PendingKhatemas relations
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function PendingKhatemas(){
+        return $this->hasMany(Khatema::class)->where('completed', 0);
     }
 
 

@@ -15,14 +15,8 @@ class KhatemaController extends APIController
      */
     public function index(){
         $khatemas = array();
-        $khatemas['completed'] = Khatema::where([
-            ['user_id', fauth()->id()],
-            ['completed', 1]
-        ])->get();
-        $khatemas['pending'] = Khatema::where([
-            ['user_id', fauth()->id()],
-            ['completed', 0]
-        ])->get();
+        $khatemas['completed'] = fauth()->user()->CompletedKhatemas;
+        $khatemas['pending'] = fauth()->user()->PendingKhatemas;
         return $this->response($khatemas);
     }
 
