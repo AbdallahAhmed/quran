@@ -1073,6 +1073,210 @@
           }
         }
       }
+    },
+    "/khatemas": {
+      "get": {
+        "tags": [
+          "Khatemas"
+        ],
+        "summary": "Get User Khatemas",
+        "description": "Get User Khatemas",
+        "operationId": "khatemas",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Get User Khatemas",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "completed": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Khatema"
+                  }
+                },
+                "pending": {
+                  "$ref": "#/definitions/Khatema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khatemas/create": {
+      "post": {
+        "tags": [
+          "Khatemas"
+        ],
+        "summary": "Create new user khatema",
+        "description": "Create new user khatema",
+        "operationId": "khatemas.create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Create new user khatema",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "remaining_pages": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 100
+                },
+                "completed_pages": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 150
+                },
+                "completed": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 0
+                },
+                "taken_hours":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 50
+                },
+                "remaining_hours":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 500
+                },
+                "completed_at":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 0
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "completed": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Khatema"
+                  }
+                },
+                "pending": {
+                  "$ref": "#/definitions/Khatema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/khatemas/update": {
+      "post": {
+        "tags": [
+          "Khatemas"
+        ],
+        "summary": "Update user khatema",
+        "description": "Update new user khatema",
+        "operationId": "khatemas.update",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "query",
+            "description": "Update user khatema",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "khatema_id": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 1
+                },
+                "remaining_pages": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 100
+                },
+                "completed_pages": {
+                  "type": "integer",
+                  "required": true,
+                  "example": 150
+                },
+                "completed": {
+                  "type": "integer",
+                  "required": false,
+                  "example": 0
+                },
+                "taken_hours":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 50
+                },
+                "remaining_hours":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 500
+                },
+                "completed_at":{
+                  "type": "integer",
+                  "required": true,
+                  "example": 0
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "completed": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Khatema"
+                  }
+                },
+                "pending": {
+                  "$ref": "#/definitions/Khatema"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1347,6 +1551,37 @@
         },
         "winner": {
           "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "Khatema": {
+      "type": "object",
+      "properties": {
+        "khatema_id": {
+          "type": "integer"
+        },
+        "remaining_pages": {
+          "type": "integer"
+        },
+        "completed_pages": {
+          "type": "integer"
+        },
+        "completed": {
+          "type": "integer"
+        },
+        "taken_hours": {
+          "type": "integer"
+        },
+        "remaining_hours": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2018-09-24"
+        },
+        "completed_at": {
+          "type": "string",
+          "example": "2018-09-24"
         }
       }
     }

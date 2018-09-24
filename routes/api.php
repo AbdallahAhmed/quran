@@ -47,6 +47,11 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
     $router->post('bookmarks/create', 'API\BookmarkController@create');
     $router->post('bookmarks/delete', 'API\BookmarkController@delete');
     $router->post('bookmarks/clear', 'API\BookmarkController@clear');
+
+    //khatemas
+    $router->get('khatemas', 'API\KhatemaController@index');
+    $router->post('khatemas/create', 'API\KhatemaController@create');
+    $router->post('khatemas/update', 'API\KhatemaController@update');
 });
 
 
