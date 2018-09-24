@@ -16,7 +16,9 @@ class KhatemaController extends APIController
     public function index(){
         $khatemas = array();
         $khatemas['completed'] = fauth()->user()->CompletedKhatemas;
-        $khatemas['pending'] = fauth()->user()->PendingKhatemas;
+        $khatemas['pending'] = fauth()->user()->PendingKhatemas()->first();
+        if(count($khatemas['completed']) == 0 && count($khatemas['pending']) == 0)
+            return $this->errorResponse(['message' => "You didn't start any Khatema"]);
         return $this->response($khatemas);
     }
 
@@ -65,6 +67,6 @@ class KhatemaController extends APIController
             "remaining_hours" => $request->get('remaining_hours'),
             "completed_at"    => $completed_at
         ]);
-        return $this->response(['message' => 'Updated Successfully']);
+        return $this->response(['message' => 'Khatema Updated Successfully']);
     }
 }
