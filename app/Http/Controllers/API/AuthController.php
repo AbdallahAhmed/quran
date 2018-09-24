@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Mail\PasswordChangedMail;
+use App\Mail\ResetPasswordMail;
 use App\Mail\VerificationMail;
 use App\Mail\WelcomeMail;
 use App\Models\Media;
@@ -247,5 +249,54 @@ class AuthController extends APIController
         $user->api_token = str_random(60);
         $user->save();
         return $this->response(['token' => $user->api_token]);
+    }
+
+    /**
+     * POST /auth/forget-password
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function forgetPassword(Request $request)
+    {
+        $user = User::where(['backend' => 0, 'email' => $request->get('email')])->first();
+        if (!$user) {
+            return $this->errorResponse(['You email not exists']);
+        }
+        $user->code = generateCode();
+        $user->save();
+        Mail::to($user->email)->send(new ResetPasswordMail($user));
+        return $this->response(['message' => 'Check your email']);
+    }
+
+
+    /**
+     * POST /auth/reset-password
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPassword(Request $request)
+    {
+        $user = User::where(['backend' => 0, 'email' => $request->get('email')])->first();
+        if (!$user) {
+            return $this->errorResponse(['You email not exists']);
+        }
+        $validator = Validator::make($request->all(), [
+            'code' => 'required',
+            'password' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse(($validator->errors()->all()));
+        }
+
+        if ($user->code != $request->get('code')) {
+            return $this->errorResponse(['This code invalid']);
+        }
+
+        $user->code = null;
+        $user->password = $request->get('password');
+        $user->save();
+        Mail::to($user->email)->send(new PasswordChangedMail($user));
+        return $this->response(['user' => $user, 'message' => 'You  password has been Changed']);
     }
 }

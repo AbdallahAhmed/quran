@@ -13,9 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
+// Authentication
 Route::post('/auth', 'API\AuthController@login');
 Route::get('/auth/resendCode', 'API\AuthController@resendCode');
 Route::post('/auth/verify', 'API\AuthController@verify');
+Route::post('/auth/forget-password', 'API\AuthController@forgetPassword');
+Route::post('/auth/reset-password', 'API\AuthController@resetPassword');
 
 Route::post('/register', 'API\AuthController@register');
 
