@@ -19,7 +19,7 @@ class AyatController extends APIController
         $id = $request->get('ayah_id');
         $ayah = Ayat::find($id);
         if ($ayah) {
-        $ayah->load('surah');
+            $ayah->load('surah');
             return $this->response($ayah);
         } else {
             return $this->errorResponse(['Ayah Not Found']);
@@ -38,20 +38,25 @@ class AyatController extends APIController
         $offset = $request->get('offset', 0);
 
         $ayat = array();
-        $ayats = Ayat::where('text', 'like', '%' . $q )
+        $ayats = Ayat::where([
+            ['text', 'like', '%' . $q . '%'],
+            ['edition_id', 78]
+        ])
             ->withoutGlobalScopes()
             ->offset($offset)
             ->limit($limit)
             ->get();
+
         $ayat['ayat'] = array();
-        foreach ($ayats as $key => $ayah){
+        foreach ($ayats as $key => $ayah) {
             $ayat['ayat'][] = Ayat::where([
-                ['number', $ayah->number]
+                ['number', $ayah->number],
+                ['numberinsurat', $ayah->numberinsurat]
             ])->first();
             $ayat['ayat'][$key]->load('surah');
         }
 
-        $ayat['count'] = count($ayat['ayat']);
-        return $this->response($ayat);
+        //$ayat['count'] = count($ayat['ayat']);
+        return $this->response($ayat['ayat']);
     }
 }
