@@ -130,7 +130,7 @@ class AuthController extends APIController
                 $user->save();
             }
             Mail::to($user->email)->send(new VerificationMail($user));
-            return $this->response(['message' => 'email sent']);
+            return $this->response('email sent');
         } else {
             return $this->errorResponse(['Api token  missing']);
         }
@@ -157,7 +157,7 @@ class AuthController extends APIController
             $user->status = 1;
             $user->save();
             Mail::to($user->email)->send(new WelcomeMail($user));
-            return $this->response(['message' => 'Verification Completed']);
+            return $this->response('Verification Completed');
         } else {
             return $this->errorResponse(['Api token  missing']);
         }
@@ -236,7 +236,7 @@ class AuthController extends APIController
         $user->save();
 
         $user->load('photo');
-        return $this->response(['user' => ($user), 'token' => $user->api_token]);
+        return $this->response(($user));
     }
 
     /**
@@ -248,7 +248,7 @@ class AuthController extends APIController
         $user = fauth()->user();
         $user->api_token = str_random(60);
         $user->save();
-        return $this->response(['token' => $user->api_token]);
+        return $this->response($user->api_token);
     }
 
     /**
@@ -265,7 +265,7 @@ class AuthController extends APIController
         $user->code = generateCode();
         $user->save();
         Mail::to($user->email)->send(new ResetPasswordMail($user));
-        return $this->response(['message' => 'Check your email']);
+        return $this->response('Check your email');
     }
 
 
@@ -297,6 +297,6 @@ class AuthController extends APIController
         $user->password = $request->get('password');
         $user->save();
         Mail::to($user->email)->send(new PasswordChangedMail($user));
-        return $this->response(['user' => $user, 'message' => 'You  password has been Changed']);
+        return $this->response($user);
     }
 }
