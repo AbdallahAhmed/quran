@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Contest;
+use App\Models\Khatema;
 use App\Models\Media;
 use Illuminate\Support\Carbon;
 
@@ -63,5 +64,23 @@ class User extends \Dot\Users\Models\User
     {
         return $this->belongsToMany(Contest::class, 'contests_members', 'member_id', 'contest_id')->where('expired_at', '>=', Carbon::now());
     }
+
+    /**
+     * CompletedKhatemas relations
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function CompletedKhatemas(){
+        return $this->hasMany(Khatema::class)->where('completed', 1);
+    }
+
+    /**
+     * PendingKhatemas relations
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function PendingKhatemas(){
+        return $this->hasMany(Khatema::class)->where('completed', 0);
+    }
+
+
 
 }
