@@ -32,8 +32,9 @@ class PageController extends APIController
             foreach ($ayahs as $key => $ayah) {
                 $ayahs[$key]['surah'] = Surat::find($ayah->surat_id);
             }
-            $page->load('surat');
-            $page->ayahs = $ayahs;
+            //$page->load('surat');
+            //$page->ayahs = $ayahs;
+            $page = $ayahs;
         return $this->response($page, true, 200);
         } else {
             return $this->errorResponse(['Page not found'], 400);

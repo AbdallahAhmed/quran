@@ -8,6 +8,8 @@ class Page extends Model
 {
     protected $table = 'page';
 
+    protected $hidden = ['id'];
+
     public function ayat(){
         return $this->hasMany(Ayat::class,'page_id','id');
     }

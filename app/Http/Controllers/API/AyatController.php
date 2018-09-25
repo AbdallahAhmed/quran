@@ -20,7 +20,7 @@ class AyatController extends APIController
         $ayah = Ayat::find($id);
         if ($ayah) {
         $ayah->load('surah');
-            return $this->response(['ayah' => $ayah]);
+            return $this->response($ayah);
         } else {
             return $this->errorResponse(['Ayah Not Found']);
         }

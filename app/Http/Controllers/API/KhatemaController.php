@@ -18,7 +18,7 @@ class KhatemaController extends APIController
         $khatemas['completed'] = fauth()->user()->CompletedKhatemas;
         $khatemas['pending'] = fauth()->user()->PendingKhatemas()->first();
         if(count($khatemas['completed']) == 0 && count($khatemas['pending']) == 0)
-            return $this->errorResponse(['message' => "You didn't start any Khatema"]);
+            return $this->errorResponse("You didn't start any Khatema");
         return $this->response($khatemas);
     }
 
@@ -34,7 +34,7 @@ class KhatemaController extends APIController
            ['completed', 0]
         ])->first();
         if($khatema){
-            return $this->errorResponse(['message' => "User didn't finish last khatema"]);
+            return $this->errorResponse("User didn't finish last khatema");
         }
         $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
         Khatema::create([
@@ -47,7 +47,7 @@ class KhatemaController extends APIController
             "created_at"      => Carbon::now(),
             "completed_at"    => $completed_at
         ]);
-        return $this->response(['message' => "Khatema created successfully"]);
+        return $this->response("Khatema created successfully");
     }
 
     /**
@@ -67,6 +67,6 @@ class KhatemaController extends APIController
             "remaining_hours" => $request->get('remaining_hours'),
             "completed_at"    => $completed_at
         ]);
-        return $this->response(['message' => 'Khatema Updated Successfully']);
+        return $this->response('Khatema Updated Successfully');
     }
 }
