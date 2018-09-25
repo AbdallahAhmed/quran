@@ -47,7 +47,7 @@ class ContestController extends APIController
             'member_id' => fauth()->id()
         ]);
 
-        return $this->response(['contest' => $contest, 'message' => 'Contest created successfully']);
+        return $this->response($contest);
     }
 
 
@@ -82,7 +82,7 @@ class ContestController extends APIController
             'member_id' => fauth()->id()
         ]);
 
-        return $this->response(['You join to contest successfully']);
+        return $this->response('You join to contest successfully');
     }
 
 
@@ -106,7 +106,7 @@ class ContestController extends APIController
             return $this->errorResponse(['You are not join in this contests']);
         }
 
-        return $this->response(['message' => 'Leaving successfully']);
+        return $this->response('Leaving successfully');
     }
 
 
@@ -141,7 +141,7 @@ class ContestController extends APIController
             }
         }
         $contests = $query->get();
-        return $this->response(['contests' => $contests]);
+        return $this->response($contests);
     }
 
 
@@ -156,7 +156,7 @@ class ContestController extends APIController
         if (!$contest) {
             return $this->errorResponse(['Contest not founded'], 404);
         }
-        return $this->response(['contest' => $contest]);
+        return $this->response($contest);
     }
 
 
@@ -170,8 +170,8 @@ class ContestController extends APIController
 
         $contest = fauth()->user()->contest;
         if (count($contest) > 0) {
-            $contest[0]->load(['creator','winner']);
-            return $this->response(['contest' => $contest[0]]);
+            $contest[0]->load(['creator', 'winner']);
+            return $this->response($contest[0]);
         }
         return $this->errorResponse(['You are not joined to any opened Contests']);
     }
