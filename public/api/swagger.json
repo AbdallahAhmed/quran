@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "quran.uniative.com/",
+  "host": "quran.uniative.com",
   "basePath": "/api",
   "tags": [
     {
@@ -699,20 +699,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ayah_id": {
+                "surah_id": {
                   "type": "integer",
                   "required": true,
-                  "example": 473938
-                },
-                "offset": {
-                  "type": "integer",
-                  "required": false,
-                  "example": 5
-                },
-                "limit": {
-                  "type": "integer",
-                  "required": false,
-                  "example": 10
+                  "example": 2
                 }
               }
             }
@@ -724,15 +714,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "surah": {
                   "$ref": "#/definitions/Surah"
-                },
-                "ayat": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Ayah"
-                  }
-                }
               }
             }
           }

@@ -22,3 +22,14 @@ if (!function_exists('generateCode')) {
     }
 
 }
+
+if (!function_exists('juz_name')) {
+    function juz_name($number, $lang = "ar")
+    {
+        if ($lang == "ar") {
+            return ' الجزء' . trim(config('juz.' . $number));
+        }
+
+        return 'juz\' ' . $number;
+    }
+}

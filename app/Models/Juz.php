@@ -11,13 +11,14 @@ class Juz extends Model
      *
      * @var string
      */
-    protected  $table = 'juz';
+    protected $table = 'juz';
 
     /**
      *  Ayat relation
      * @return \Illuminate\Database\Eloquent\Relations\hasmany
      */
-    public function ayat(){
+    public function ayat()
+    {
         return $this->hasMany(Ayat::class);
     }
 
@@ -25,7 +26,8 @@ class Juz extends Model
      *  Surat relation
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function surat(){
-        return $this->belongsToMany(Surat::class,'ayat', 'juz_id', 'surat_id')->distinct('surat_id');
+    public function surat()
+    {
+        return $this->belongsToMany(Surat::class, 'ayat', 'juz_id', 'surat_id')->distinct('surat_id');
     }
 }

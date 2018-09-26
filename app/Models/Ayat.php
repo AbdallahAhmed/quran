@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ayat extends Model
 {
+
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends=['juz_name_en','juz_name_ar'];
+
     /**
      * The table associated with the model.
      *
@@ -25,9 +34,11 @@ class Ayat extends Model
      *  Surah relation
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function surah(){
+    public function surah()
+    {
         return $this->belongsTo(Surat::class, 'surat_id');
     }
+
     /**
      * The "booting" method of the model.
      *
@@ -42,5 +53,33 @@ class Ayat extends Model
         });
     }
 
+
+    /**
+     * @return string
+     */
+    public function getTextAttribute()
+    {
+        if ($this->attributes['numberinsurat'] != 1) {
+            return $this->attributes['text'];
+        }
+        return str_replace_first("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "", $this->attributes['text']);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJuzNameEnAttribute()
+    {
+        return juz_name($this->attributes['juz_id'], 'en');
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getJuzNameArAttribute()
+    {
+        return juz_name($this->attributes['juz_id'], 'ar');
+    }
 
 }
