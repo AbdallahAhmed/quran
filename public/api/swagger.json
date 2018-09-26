@@ -667,7 +667,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ayah": {
+                "data": {
                   "$ref": "#/definitions/Ayah"
                 }
               }
@@ -714,7 +714,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "data": {
                   "$ref": "#/definitions/Surah"
+                }
               }
             }
           }
@@ -769,7 +771,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "page": {
+                "data": {
                   "$ref": "#/definitions/Page"
                 }
               }
@@ -826,13 +828,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "surat": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Surah"
-                  }
-                },
-                "ayat": {
+                "data": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/Ayah"
@@ -892,14 +888,11 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ayat": {
+                "data": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/Ayah"
                   }
-                },
-                "count": {
-                  "type": "string"
                 }
               }
             }
@@ -935,7 +928,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ayat": {
+                "data": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/Ayah"
@@ -985,7 +978,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
+                "data": {
                   "type": "string"
                 }
               }
@@ -1032,7 +1025,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
+                "data": {
                   "type": "string"
                 }
               }
@@ -1069,7 +1062,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
+                "data": {
                   "type": "string"
                 }
               }
@@ -1106,14 +1099,11 @@
             "schema": {
               "type": "object",
               "properties": {
-                "completed": {
+                "data": {
                   "type": "array",
                   "items": {
                     "$ref": "#/definitions/Khatema"
                   }
-                },
-                "pending": {
-                  "$ref": "#/definitions/Khatema"
                 }
               }
             }
@@ -1184,14 +1174,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "completed": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Khatema"
-                  }
-                },
-                "pending": {
-                  "$ref": "#/definitions/Khatema"
+                "data": {
+                  "type": "string",
+                  "example": "created successfully"
                 }
               }
             }
@@ -1267,14 +1252,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "completed": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Khatema"
-                  }
-                },
-                "pending": {
-                  "$ref": "#/definitions/Khatema"
+                "data": {
+                  "type": "string",
+                  "example": "updated successfully"
                 }
               }
             }
@@ -1433,9 +1413,6 @@
     "Page": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
         "ayat": {
           "type": "array",
           "items": {

@@ -49,13 +49,9 @@ class AyatController extends APIController
 
         $ayat['ayat'] = array();
         foreach ($ayats as $key => $ayah) {
-            $ayat['ayat'][] = Ayat::where([
-                ['number', $ayah->number],
-                ['numberinsurat', $ayah->numberinsurat]
-            ])->first();
+            $ayat['ayat'][] = Ayat::where('number', $ayah->number)->first();
             $ayat['ayat'][$key]->load('surah');
         }
-
         //$ayat['count'] = count($ayat['ayat']);
         return $this->response($ayat['ayat']);
     }

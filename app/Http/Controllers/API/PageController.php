@@ -35,9 +35,9 @@ class PageController extends APIController
             //$page->load('surat');
             //$page->ayahs = $ayahs;
             $page = $ayahs;
-        return $this->response($page, true, 200);
+        return $this->response($page);
         } else {
-            return $this->errorResponse(['Page not found'], 400);
+            return $this->errorResponse('Page not found');
         }
     }
 

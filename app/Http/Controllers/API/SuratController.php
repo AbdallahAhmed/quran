@@ -16,12 +16,7 @@ class SuratController extends APIController
      */
     public function index(Request $request)
     {
-        if($request->filled('surah_id')){
-            return $this->errorResponse('surah_id is required.');
-        }
-
         $id = $request->get('surah_id');
-
         $surah = Surat::find($id);
 
         if ($surah) {
