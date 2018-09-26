@@ -21,7 +21,7 @@ class SuratController extends APIController
 
         $surah = Surat::find($id);
         if($surah){
-        $surah->ayat = $surah->ayat()->take($limit)->offset($offset)->get();
+        $surah = $surah->ayat()->take($limit)->offset($offset)->get();
         return $this->response($surah);
         }
         return $this->errorResponse('Surah not found');

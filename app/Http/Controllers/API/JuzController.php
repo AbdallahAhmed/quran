@@ -20,8 +20,8 @@ class JuzController extends APIController
 
         $juz = Juz::find($id);
         if($juz){
-            $juz->load('surat');
-            $juz['ayat'] = $juz->ayat()->take($limit)->offset($offset)->get();
+            //$juz->load('surat');
+            $juz = $juz->ayat()->take($limit)->offset($offset)->get()->load('surah');
             return $this->response($juz);
         }
         return $this->errorResponse('Juz not found');

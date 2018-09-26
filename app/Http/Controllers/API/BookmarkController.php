@@ -22,7 +22,7 @@ class BookmarkController extends APIController
             $ayat[] = Ayat::find($bookmark->ayah_id);
             $ayat[$key]->load('surah');
         }
-        return $this->response(['ayat' => $ayat]);
+        return $this->response($ayat);
     }
 
     /**
@@ -37,13 +37,13 @@ class BookmarkController extends APIController
             ['ayah_id', $ayah_id]
         ])->first();
         if($bookmark){
-            return $this->response(['message' => "Already Exist"]);
+            return $this->response("Already Exist");
         }else{
             UserAyat::create([
                'user_id' => fauth()->id(),
                'ayah_id' => $ayah_id
             ]);
-            return $this->response(['message' => "Saved Successfully"]);
+            return $this->response("Saved Successfully");
         }
     }
 
@@ -58,7 +58,7 @@ class BookmarkController extends APIController
             ['user_id', fauth()->id()],
             ['ayah_id', $ayah_id]
         ])->delete();
-        return $this->response(['message' => "Deleted Successfully"]);
+        return $this->response("Deleted Successfully");
     }
     /**
      * POST /bookmarks/clear
@@ -66,6 +66,6 @@ class BookmarkController extends APIController
      */
     public function clear(){
         UserAyat::where('user_id', fauth()->id())->delete();
-        return $this->response(['message' => "Deleted Successfully"]);
+        return $this->response("Deleted Successfully");
     }
 }
