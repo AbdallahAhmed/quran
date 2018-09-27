@@ -44,6 +44,13 @@ class Surat extends Model
      */
     public function getPageIdAttribute()
     {
-        return $this->ayat()->where('numberinsurat', 1)->first()->page_id;
+
+        $aya = $this->ayat()->orderBy('numberinsurat', "ASC")->limit(1)->first()->page_id;
+
+
+        if($aya){
+
+        }
+        return $aya;
     }
 }

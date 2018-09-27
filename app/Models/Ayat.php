@@ -63,7 +63,7 @@ class Ayat extends Model
         if ($this->attributes['numberinsurat'] != 1) {
             return $this->attributes['text'];
         }
-        return str_replace_first("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "", $this->attributes['text']);
+        return str_replace_first("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ", "", $this->attributes['text']);
     }
 
     /**
