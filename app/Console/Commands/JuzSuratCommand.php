@@ -45,7 +45,7 @@ class JuzSuratCommand extends Command
             $juz['name_en'] = juz_name($juz_number, 'en');
             $juz['name_ar'] = juz_name($juz_number, 'ar');
 
-            $grouped = Ayat::where('juz_id', $juz_number)->orderBy('number', 'ASC')->get(['surat_id', 'number', 'page_id', 'juz_id'])->groupBy('surat_id');
+            $grouped = Ayat::where('juz_id', $juz_number)->orderBy('number', 'ASC')->get(['surat_id', 'number', 'page_id', 'juz_id','id'])->groupBy('surat_id');
 
             $swar = [];
             foreach ($grouped as $item => $ayat) {
