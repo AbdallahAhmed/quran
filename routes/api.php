@@ -26,6 +26,7 @@ Route::get('/page', 'API\PageController@index');
 Route::get('/ayah', 'API\AyatController@index');
 Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
+Route::get('/JuzAll', 'API\JuzController@JuzAll');
 Route::get('/juz', 'API\JuzController@index');
 
 
