@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 class Ayat extends Model
 {
@@ -14,7 +15,7 @@ class Ayat extends Model
      *
      * @var array
      */
-    protected $appends=['juz_name_en','juz_name_ar'];
+    protected $appends=['juz_name'];
 
     /**
      * The table associated with the model.
@@ -28,7 +29,7 @@ class Ayat extends Model
      *
      * @var array
      */
-    protected $hidden = ['edition_id'];
+    protected $hidden = ["edition_id", "englishname", "englishtranslation"];
 
     /**
      *  Surah relation
@@ -68,18 +69,8 @@ class Ayat extends Model
     /**
      * @return mixed
      */
-    public function getJuzNameEnAttribute()
+    public function getJuzNameAttribute()
     {
-        return juz_name($this->attributes['juz_id'], 'en');
+        return juz_name($this->attributes['juz_id'], Request::get("lang", app()->getLocale()));
     }
-
-
-    /**
-     * @return mixed
-     */
-    public function getJuzNameArAttribute()
-    {
-        return juz_name($this->attributes['juz_id'], 'ar');
-    }
-
 }

@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Surat
+ * @package App\Models
+ */
 class Surat extends Model
 {
     /**
@@ -13,14 +17,23 @@ class Surat extends Model
      */
     protected $table = 'surat';
 
+
+    /**
+     * @var array
+     */
+    protected $hidden = ["englishname", "englishtranslation"];
+
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected  $appends=['page_id'];
+    protected $appends=['page_id'];
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function ayat()
     {
         return $this->hasMany(Ayat::class, 'surat_id', 'id');
