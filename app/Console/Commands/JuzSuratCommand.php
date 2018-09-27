@@ -41,7 +41,7 @@ class JuzSuratCommand extends Command
     {
         $juzs = [];
         for ($juz_number = 1; $juz_number <= 30; $juz_number++) {
-            $juzs[$juz_number] = $juz = [];
+            $juz = [];
             $juz['name_en'] = juz_name($juz_number, 'en');
             $juz['name_ar'] = juz_name($juz_number, 'ar');
 
@@ -53,7 +53,8 @@ class JuzSuratCommand extends Command
             }
 
             $juz['swar'] = $swar;
-            $juzs[] = $juz;
+
+            $juzs[$juz_number] = $juz;
         }
 
         file_put_contents(public_path('api/juz_surat.json'), json_encode($juzs));
