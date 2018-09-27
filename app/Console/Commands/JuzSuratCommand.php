@@ -53,8 +53,11 @@ class JuzSuratCommand extends Command
             }
 
             $juz['swar'] = $swar;
-            file_put_contents(public_path('api/juz_surat.json'),json_encode($juz));
+            $juzs[] = $juzs;
         }
+
+        file_put_contents(public_path('api/juz_surat.json'), json_encode($juzs));
+
         //
     }
 }
