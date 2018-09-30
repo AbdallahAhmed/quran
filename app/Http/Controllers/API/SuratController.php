@@ -17,12 +17,20 @@ class SuratController extends APIController
     public function index(Request $request)
     {
         $id = $request->get('surah_id');
+
+        $lang = $request->get("lang", app()->getLocale());
+
         $surah = Surat::find($id);
 
         if ($surah) {
+
             $ayat = $surah->ayat()->get();
-            $surah->juz_name_en = $ayat[0]->juz_name_en;
-            $surah->juz_name_ar = $ayat[0]->juz_name_ar;
+
+            if($lang == "en"){
+                $surah->name = $surah->englishname;
+            }
+
+            $surah->juz_name = $ayat[0]->juz_name;
             $surah->pages = $ayat->groupBy('page_id');
             return $this->response($surah);
         }
