@@ -82,5 +82,4 @@ class User extends \Dot\Users\Models\User
     }
 
 
-
 }
