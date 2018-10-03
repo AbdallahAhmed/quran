@@ -27,7 +27,7 @@ if (!function_exists('juz_name')) {
     function juz_name($number, $lang = "ar")
     {
         if ($lang == "ar") {
-            return trim(' الجزء' . trim(config('juz.' . $number)));
+            return trim(' الجزء ' . trim(config('juz.' . $number)));
         }
 
         return 'juz\' ' . $number;
