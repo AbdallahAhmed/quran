@@ -297,6 +297,6 @@ class AuthController extends APIController
         $user->password = $request->get('password');
         $user->save();
         Mail::to($user->email)->send(new PasswordChangedMail($user));
-        return $this->response($user);
+        return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
 }
