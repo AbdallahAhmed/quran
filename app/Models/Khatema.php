@@ -28,7 +28,7 @@ class Khatema extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'remaining_pages', 'completed_pages', 'taken_hours', 'remaining_hours', 'created_at', 'completed_at'
+        'user_id', 'completed_pages', 'taken_hours', 'remaining_hours', 'created_at', 'completed_at', 'pages'
     ];
 
     /**
