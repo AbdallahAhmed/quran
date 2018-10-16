@@ -17,7 +17,7 @@ class KhatemaController extends APIController
         $khatemas = array();
         $khatemas['completed'] = fauth()->user()->CompletedKhatemas;
         $khatemas['pending'] = fauth()->user()->PendingKhatemas()->first();
-        if(count($khatemas['completed']) == 0 && count($khatemas['pending']) == 0)
+        if(count($khatemas['completed']) == 0 && !($khatemas['pending']))
             return $this->errorResponse("You didn't start any Khatema");
         return $this->response($khatemas);
     }

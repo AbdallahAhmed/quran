@@ -29,4 +29,12 @@ class JuzController extends APIController
         }
         return $this->errorResponse('Juz not found');
     }
+
+    /**
+     * GET juz/sections
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sections(){
+        return  response()->json(file_get_contents(public_path('api/juz_surat.json')));
+    }
 }
