@@ -38,14 +38,14 @@ class KhatemaController extends APIController
         }
 
         $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
-        $khatema->remaining_pages = $request->get('remaining_pages');
-        $khatema->completed_pages = $request->get('completed_pages');
-        $khatema->completed = $request->get('completed', 0);
-        $khatema->pages = $request->get('pages');
-        $khatema->taken_hours = $request->get('taken_hours', 0);
+
+        $khatema->user_id = fauth()->id();
+        $khatema->completed_pages = $request->get('completed_pages',0);
+        $khatema->completed = $request->get('completed',0);
+        $khatema->pages = $request->get('pages', []);
+        $khatema->taken_hours = $request->get('taken_hours',0);
+        $khatema->remaining_hours = $request->get('remaining_hours',500);
         $khatema->completed_at = $completed_at;
-        $khatema->completed = $request->get('completed', 0);
-        $khatema->save();
 
         return $this->response("Khatema created successfully");
     }
@@ -60,13 +60,15 @@ class KhatemaController extends APIController
         $khatema = $request->get('id') ? Khatema::find($request->get('id')) : new Khatema();
 
         $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
-        $khatema->remaining_pages = $request->get('remaining_pages');
-        $khatema->completed_pages = $request->get('completed_pages');
-        $khatema->completed = $request->get('completed', 0);
-        $khatema->pages = $request->get('pages');
-        $khatema->taken_hours = $request->get('taken_hours', 0);
+
+        $khatema->user_id = fauth()->id();
+        $khatema->completed_pages = $request->get('completed_pages',0);
+        $khatema->completed = $request->get('completed',0);
+        $khatema->pages = $request->get('pages', []);
+        $khatema->taken_hours = $request->get('taken_hours',0);
+        $khatema->remaining_hours = $request->get('remaining_hours',500);
         $khatema->completed_at = $completed_at;
-        $khatema->completed = $request->get('completed', 0);
+
         $khatema->save();
 
         return $this->response('Khatema Updated Successfully');
