@@ -78,7 +78,7 @@ class User extends \Dot\Users\Models\User
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function PendingKhatema(){
-        return $this->belongsTo(Khatema::class)->where('completed', 0)->first();
+        return $this->belongsTo(Khatema::class)->where('completed', 0);
     }
 
 

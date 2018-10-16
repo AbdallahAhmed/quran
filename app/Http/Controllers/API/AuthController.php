@@ -57,8 +57,8 @@ class AuthController extends APIController
 
         $user->load('photo');
 
-        if(count($user->PendingKhatema) > 0)
-            $user->load('current_khatema');
+       /* if(count($user->PendingKhatema) > 0)
+            $user['current_khatema'] = $user->PendingKhatema()->first();*/
 
         return $this->response(['user' => $user, 'token' => $user->api_token]);
     }
