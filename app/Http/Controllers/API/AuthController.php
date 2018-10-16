@@ -57,8 +57,8 @@ class AuthController extends APIController
 
         $user->load('photo');
 
-       /* if(count($user->PendingKhatema) > 0)
-            $user['current_khatema'] = $user->PendingKhatema()->first();*/
+        if(!empty($user->PendingKhatema))
+            $user['current_khatema'] = $user->PendingKhatema->first();
 
         return $this->response(['user' => $user, 'token' => $user->api_token]);
     }
@@ -117,6 +117,10 @@ class AuthController extends APIController
         $user->role_id = 2;
         $user->save();
         $user->load('photo');
+
+        if(!empty($user->PendingKhatema))
+            $user['current_khatema'] = $user->PendingKhatema->first();
+
         Mail::to($user->email)->send(new VerificationMail($user));
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
@@ -300,6 +304,8 @@ class AuthController extends APIController
         $user->code = null;
         $user->password = $request->get('password');
         $user->save();
+        if(!empty($user->PendingKhatema))
+            $user['current_khatema'] = $user->PendingKhatema->first();
         Mail::to($user->email)->send(new PasswordChangedMail($user));
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
