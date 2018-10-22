@@ -59,11 +59,12 @@ class KhatemaController extends APIController
     public function update(Request $request)
     {
 
-        $khatema = $request->get('id') ? Khatema::find($request->get('id')) : new Khatema();
+        $user = fauth()->user();
 
         $completed_at = $request->filled('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
 
-        $khatema->user_id = fauth()->id();
+        $khatema = $user->PendingKhatema()->first();
+        $khatema = $khatema ? $khatema : new Khatema();
         if ($request->filled('completed_pages')) {
             $khatema->completed_pages = $request->get('completed_pages', 0);
         }
