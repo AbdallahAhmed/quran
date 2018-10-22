@@ -13,11 +13,12 @@ class KhatemaController extends APIController
      * GET /khatemas
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(){
+    public function index()
+    {
         $khatemas = array();
         $khatemas['completed'] = fauth()->user()->CompletedKhatemas;
         $khatemas['pending'] = fauth()->user()->PendingKhatema;
-        if(count($khatemas['completed']) == 0 && !($khatemas['pending']))
+        if (count($khatemas['completed']) == 0 && !($khatemas['pending']))
             return $this->errorResponse("You didn't start any Khatema");
         return $this->response($khatemas);
     }
@@ -30,21 +31,21 @@ class KhatemaController extends APIController
     public function create(Request $request)
     {
         $khatema = Khatema::where([
-           ['user_id', fauth()->id()],
-           ['completed', 0]
+            ['user_id', fauth()->id()],
+            ['completed', 0]
         ])->first();
-        if($khatema){
+        if ($khatema) {
             return $this->errorResponse("User didn't finish last khatema");
         }
 
         $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
 
         $khatema->user_id = fauth()->id();
-        $khatema->completed_pages = $request->get('completed_pages',0);
-        $khatema->completed = $request->get('completed',0);
-        $khatema->pages = $request->get('pages', []);
-        $khatema->taken_hours = $request->get('taken_hours',0);
-        $khatema->remaining_hours = $request->get('remaining_hours',500);
+        $khatema->completed_pages = $request->get('completed_pages', 0);
+        $khatema->completed = $request->get('completed', 0);
+        $khatema->pages = json_encode($request->get('pages', []));
+        $khatema->taken_hours = $request->get('taken_hours', 0);
+        $khatema->remaining_hours = $request->get('remaining_hours', 500);
         $khatema->completed_at = $completed_at;
 
         return $this->response("Khatema created successfully");
@@ -55,22 +56,42 @@ class KhatemaController extends APIController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request){
+    public function update(Request $request)
+    {
 
         $khatema = $request->get('id') ? Khatema::find($request->get('id')) : new Khatema();
 
-        $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
+        $completed_at = $request->filled('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
 
         $khatema->user_id = fauth()->id();
-        $khatema->completed_pages = $request->get('completed_pages',0);
-        $khatema->completed = $request->get('completed',0);
-        $khatema->pages = $request->get('pages', []);
-        $khatema->taken_hours = $request->get('taken_hours',0);
-        $khatema->remaining_hours = $request->get('remaining_hours',500);
-        $khatema->completed_at = $completed_at;
+        if ($request->filled('completed_pages')) {
+            $khatema->completed_pages = $request->get('completed_pages', 0);
+        }
+
+        if ($request->filled('completed')) {
+            $khatema->completed = $request->get('completed', 0);
+        }
+
+
+        $khatema->pages = json_encode($request->get('pages', []));
+
+        if ($request->filled('taken_hours')) {
+            $khatema->taken_hours = $request->get('taken_hours', 0);
+        }
+
+
+        if ($request->filled('remaining_hours')) {
+            $khatema->remaining_hours = $request->get('remaining_hours', 500);
+        }
+
+
+        if ($request->filled('completed_at')) {
+            $khatema->completed_at = $completed_at;
+
+        }
 
         $khatema->save();
 
-        return $this->response('Khatema Updated Successfully');
+        return $this->response($khatema);
     }
 }
