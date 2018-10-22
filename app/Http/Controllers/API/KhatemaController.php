@@ -90,6 +90,7 @@ class KhatemaController extends APIController
             $khatema->completed_at = $completed_at;
 
         }
+        $khatema->user_id = fauth()->id();
 
         $khatema->save();
 
