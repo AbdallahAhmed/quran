@@ -61,35 +61,32 @@ class KhatemaController extends APIController
 
         $user = fauth()->user();
 
-        $completed_at = $request->filled('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
-
         $khatema = $user->PendingKhatema()->first();
+
         $khatema = $khatema ? $khatema : new Khatema();
-        if ($request->filled('completed_pages')) {
-            $khatema->completed_pages = $request->get('completed_pages', 0);
-        }
 
-        if ($request->filled('completed')) {
-            $khatema->completed = $request->get('completed', 0);
-        }
+        $pages = (json_decode($khatema->pages ? $khatema->pages : "[]", true));
 
 
-        $khatema->pages = json_encode($request->get('pages', []));
-
-        if ($request->filled('taken_hours')) {
-            $khatema->taken_hours = $request->get('taken_hours', 0);
+        if ($request->filled('page_id')) {
+            $pages[] = $request->get('page_id');
+            $pages = array_unique($pages);
         }
 
 
-        if ($request->filled('remaining_hours')) {
-            $khatema->remaining_hours = $request->get('remaining_hours', 500);
+        if ($request->filled('pages')) {
+            $pages = array_unique(array_merge($pages, $request->get('pages', [])));
         }
 
 
-        if ($request->filled('completed_at')) {
-            $khatema->completed_at = $completed_at;
-
+        if ($request->filled('completed') || count($pages) >= 604) {
+            $khatema->completed = $request->get('completed', 1);
+            $khatema->completed_at = Carbon::now();
         }
+
+
+        $khatema->pages = json_encode(array_values($pages));
+
         $khatema->user_id = fauth()->id();
 
         $khatema->save();

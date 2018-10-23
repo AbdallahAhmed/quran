@@ -16,9 +16,10 @@ class CreateKhatemasTable extends Migration
         Schema::create('khatemas', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->integer('completed_pages');
-            $table->integer('taken_hours');
-            $table->integer('remaining_hours');
+            $table->integer('completed_pages')->nullable();
+            $table->integer('taken_hours')->nullable();;
+            $table->integer('completed')->nullable();;
+            $table->integer('remaining_hours')->nullable();;
             $table->json('pages');
             $table->timestamp('completed_at')->nullable()->index();
             $table->timestamp('created_at')->nullable()->index();
