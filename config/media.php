@@ -39,7 +39,7 @@ return [
     'sizes' => [
         'medium' => array(460, 307),
         'small' => array(234, 156),
-        'thumbnail' => array(165, 108)
+        'thumbnail' => array(100, 100)
     ],
 
     /*
