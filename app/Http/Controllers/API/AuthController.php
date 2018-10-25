@@ -72,6 +72,8 @@ class AuthController extends APIController
     public function register(Request $request)
     {
 
+        app()->setLocale($request->get('lang', "ar"));
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users,email,[id],id',
             'password' => 'required|min:6',
@@ -179,6 +181,8 @@ class AuthController extends APIController
     public function update(Request $request)
     {
 
+        app()->setLocale($request->get('lang', "ar"));
+
         $user = fauth()->user();
 
         $validator = Validator::make($request->all(), [
@@ -252,6 +256,9 @@ class AuthController extends APIController
      */
     public function tokenReset()
     {
+
+        app()->setLocale($request->get('lang', "ar"));
+
         $user = fauth()->user();
         $user->api_token = str_random(60);
         $user->save();
@@ -265,6 +272,9 @@ class AuthController extends APIController
      */
     public function forgetPassword(Request $request)
     {
+
+        app()->setLocale($request->get('lang', "ar"));
+
         $user = User::where(['backend' => 0, 'email' => $request->get('email')])->first();
         if (!$user) {
             return $this->errorResponse(['You email not exists']);
@@ -283,6 +293,9 @@ class AuthController extends APIController
      */
     public function resetPassword(Request $request)
     {
+
+        app()->setLocale($request->get('lang', "ar"));
+
         $user = User::where(['backend' => 0, 'email' => $request->get('email')])->first();
         if (!$user) {
             return $this->errorResponse(['You email not exists']);
