@@ -15,10 +15,11 @@ class BookmarkController extends APIController
      * GET /bookmarks
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(){
+    public function index()
+    {
         $bookmarks = UserAyat::where('user_id', fauth()->id())->get();
         $ayat = array();
-        foreach ($bookmarks as $key => $bookmark){
+        foreach ($bookmarks as $key => $bookmark) {
             $ayat[] = Ayat::find($bookmark->ayah_id);
             $ayat[$key]->load('surah');
         }
@@ -30,21 +31,35 @@ class BookmarkController extends APIController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $ayah_id = $request->get('ayah_id');
+        if (is_array($ayah_id)) {
+            foreach ($ayah_id as $id) {
+                $exist = UserAyat::where([
+                    ['user_id', fauth()->id()],
+                    ['ayah_id', $id]
+                ])->get();
+                if ($exist)
+                    continue;
+                else {
+                    UserAyat::create([
+                        'user_id' => fauth()->id(),
+                        'ayah_id' => $id
+                    ]);
+                }
+            }
+        }
         $bookmark = UserAyat::where([
             ['user_id', fauth()->id()],
             ['ayah_id', $ayah_id]
         ])->first();
-        if($bookmark){
-            return $this->response("Already Exist");
-        }else{
+        if (!$bookmark)
             UserAyat::create([
-               'user_id' => fauth()->id(),
-               'ayah_id' => $ayah_id
+                'user_id' => fauth()->id(),
+                'ayah_id' => $ayah_id
             ]);
-            return $this->response("Saved Successfully");
-        }
+        return $this->response("Saved Successfully");
     }
 
     /**
@@ -52,7 +67,8 @@ class BookmarkController extends APIController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         $ayah_id = $request->get('ayah_id');
         UserAyat::where([
             ['user_id', fauth()->id()],
@@ -60,11 +76,13 @@ class BookmarkController extends APIController
         ])->delete();
         return $this->response("Deleted Successfully");
     }
+
     /**
      * POST /bookmarks/clear
      * @return \Illuminate\Http\JsonResponse
      */
-    public function clear(){
+    public function clear()
+    {
         UserAyat::where('user_id', fauth()->id())->delete();
         return $this->response("Deleted Successfully");
     }
