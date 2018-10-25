@@ -17,13 +17,7 @@ class BookmarkController extends APIController
      */
     public function index()
     {
-        $bookmarks = UserAyat::where('user_id', fauth()->id())->get();
-        $ayat = array();
-        foreach ($bookmarks as $key => $bookmark) {
-            $ayat[] = Ayat::find($bookmark->ayah_id);
-            $ayat[$key]->load('surah');
-        }
-        return $this->response($ayat);
+        return $this->response((fauth()->user()->ayat));
     }
 
     /**
@@ -34,33 +28,7 @@ class BookmarkController extends APIController
     public function create(Request $request)
     {
         $ayah_id = $request->get('ayah_id');
-        if (is_array($ayah_id)) {
-            foreach ($ayah_id as $id) {
-                $exist = UserAyat::where([
-                    ['user_id', fauth()->id()],
-                    ['ayah_id', $id]
-                ])->get();
-                if ($exist)
-                    continue;
-                else {
-                    UserAyat::create([
-                        'user_id' => fauth()->id(),
-                        'ayah_id' => $id
-                    ]);
-                }
-            }
-        } else {
-            $bookmark = UserAyat::where([
-                ['user_id', fauth()->id()],
-                ['ayah_id', $ayah_id]
-            ])->first();
-            if (!$bookmark)
-                UserAyat::create([
-                    'user_id' => fauth()->id(),
-                    'ayah_id' => $ayah_id
-                ]);
-        }
-
+        fauth()->user()->ayat()->syncWithoutDetaching($ayah_id);
         return $this->response("Saved Successfully");
     }
 
@@ -72,10 +40,7 @@ class BookmarkController extends APIController
     public function delete(Request $request)
     {
         $ayah_id = $request->get('ayah_id');
-        UserAyat::where([
-            ['user_id', fauth()->id()],
-            ['ayah_id', $ayah_id]
-        ])->delete();
+        fauth()->user()->ayat()->detach($ayah_id);
         return $this->response("Deleted Successfully");
     }
 
@@ -85,7 +50,7 @@ class BookmarkController extends APIController
      */
     public function clear()
     {
-        UserAyat::where('user_id', fauth()->id())->delete();
+        fauth()->user()->ayat()->detach();
         return $this->response("Deleted Successfully");
     }
 }

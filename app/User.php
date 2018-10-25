@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Ayat;
 use App\Models\Contest;
 use App\Models\Khatema;
 use App\Models\Media;
@@ -79,6 +80,10 @@ class User extends \Dot\Users\Models\User
      */
     public function PendingKhatema(){
         return $this->hasOne(Khatema::class)->where('completed', 0);
+    }
+
+    public function ayat(){
+        return $this->belongsToMany(Ayat::class, 'users_ayat','user_id', 'ayah_id');
     }
 
 
