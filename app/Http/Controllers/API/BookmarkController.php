@@ -17,7 +17,7 @@ class BookmarkController extends APIController
      */
     public function index()
     {
-        return $this->response((fauth()->user()->ayat));
+        return $this->response((fauth()->user()->ayat()->with('surah')->get()));
     }
 
     /**
