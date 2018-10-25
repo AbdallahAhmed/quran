@@ -49,16 +49,18 @@ class BookmarkController extends APIController
                     ]);
                 }
             }
+        } else {
+            $bookmark = UserAyat::where([
+                ['user_id', fauth()->id()],
+                ['ayah_id', $ayah_id]
+            ])->first();
+            if (!$bookmark)
+                UserAyat::create([
+                    'user_id' => fauth()->id(),
+                    'ayah_id' => $ayah_id
+                ]);
         }
-        $bookmark = UserAyat::where([
-            ['user_id', fauth()->id()],
-            ['ayah_id', $ayah_id]
-        ])->first();
-        if (!$bookmark)
-            UserAyat::create([
-                'user_id' => fauth()->id(),
-                'ayah_id' => $ayah_id
-            ]);
+
         return $this->response("Saved Successfully");
     }
 
