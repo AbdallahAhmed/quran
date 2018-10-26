@@ -72,7 +72,12 @@ class AuthController extends APIController
     public function register(Request $request)
     {
 
+
+
+
         app()->setLocale($request->get('lang', "ar"));
+
+
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users,email,[id],id',
