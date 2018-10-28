@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Contest;
 use App\Models\ContestMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class ContestController extends APIController
@@ -135,6 +136,9 @@ class ContestController extends APIController
                     case 'expired';
                         $query = $query->expired();
                         break;
+                    case 'all';
+                        $query = $query->where('expired_at', '>', Carbon::now());
+                        break;
                     case 'joined';
                         $query = $query->whereHas('members', function ($query) {
                             $query->where('members.id', fauth()->id());
@@ -143,8 +147,8 @@ class ContestController extends APIController
                 }
                 $contests[$singleStatus] = $query->get();
             }
-        }else{
-            $contests=Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
+        } else {
+            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
         }
         return $this->response($contests);
     }
