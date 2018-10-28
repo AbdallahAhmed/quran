@@ -120,27 +120,32 @@ class ContestController extends APIController
         $limit = $request->get('limit', 8);
         $offset = $request->get('offset', 0);
 
-        $query = Contest::with(['creator', 'winner'])->take($limit)->offset($offset);
-
+        $contests = [];
         if ($request->filled('status')) {
-            switch ($request->get('status')) {
-                case 'coming';
-                    $query = $query->coming();
-                    break;
-                case 'opened';
-                    $query = $query->opened();
-                    break;
-                case 'expired';
-                    $query = $query->expired();
-                    break;
-                case 'joined';
-                    $query = $query->whereHas('members', function ($query) {
-                        $query->where('members.id', fauth()->id());
-                    });
-                    break;
+            $status = explode('|', $request->get('status'));
+            foreach ($status as $singleStatus) {
+                $query = Contest::with(['creator', 'winner'])->take($limit)->offset($offset);
+                switch ($singleStatus) {
+                    case 'coming';
+                        $query = $query->coming();
+                        break;
+                    case 'opened';
+                        $query = $query->opened();
+                        break;
+                    case 'expired';
+                        $query = $query->expired();
+                        break;
+                    case 'joined';
+                        $query = $query->whereHas('members', function ($query) {
+                            $query->where('members.id', fauth()->id());
+                        });
+                        break;
+                }
+                $contests[$singleStatus] = $query->get();
             }
+        }else{
+            $contests=Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
         }
-        $contests = $query->get();
         return $this->response($contests);
     }
 
