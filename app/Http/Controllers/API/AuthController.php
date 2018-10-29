@@ -122,7 +122,7 @@ class AuthController extends APIController
         $user['current_khatema'] = $user->PendingKhatema()->first();
 
 
-//        Mail::to($user->email)->send(new VerificationMail($user));
+        Mail::to($user->email)->send(new VerificationMail($user));
         \Log::debug('email sent');
 
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
