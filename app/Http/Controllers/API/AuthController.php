@@ -72,7 +72,6 @@ class AuthController extends APIController
     public function register(Request $request)
     {
 
-        \Log::debug('run');
         app()->setLocale($request->get('lang', "ar"));
 
 
@@ -84,7 +83,6 @@ class AuthController extends APIController
 
         $media = null;
         $imageData = null;
-        \Log::debug('save image');
         if ($request->filled('image_data')) {
             $media = new Media();
             $imageData = explode('base64,', $request->get('image_data'));
@@ -123,10 +121,9 @@ class AuthController extends APIController
 
         $user['current_khatema'] = $user->PendingKhatema()->first();
 
-        \Log::debug('email');
 
-        Mail::to($user->email)->send(new VerificationMail($user));
-        \Log::debug('after email');
+//        Mail::to($user->email)->send(new VerificationMail($user));
+        \Log::debug('email sent');
 
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
