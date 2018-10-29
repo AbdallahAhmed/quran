@@ -144,13 +144,18 @@ class ContestController extends APIController
                             $query->where('users.id', fauth()->id());
                         });
                         break;
+                    case 'current';
+                        $query = $query->whereHas('members', function ($query) {
+                            $query->where('users.id', fauth()->id());
+                        })->where('expired_at', '<', Carbon::now());
+                        break;
                 }
                 $contests[$singleStatus] = $query->get();
             }
         } else {
             $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
             $user = fauth()->user();
-            if($user && count($user->contest) > 0){
+            if ($user && count($user->contest) > 0) {
                 $contests['current'] = $user->contest;
             }
         }
