@@ -123,7 +123,6 @@ class AuthController extends APIController
 
 
         Mail::to($user->email)->send(new VerificationMail($user));
-        \Log::debug('email sent');
 
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
