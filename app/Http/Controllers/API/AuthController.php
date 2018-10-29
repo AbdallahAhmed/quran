@@ -247,6 +247,8 @@ class AuthController extends APIController
         }
         $user->save();
 
+        $user['current_khatema'] = $user->PendingKhatema()->first();
+
         $user->load('photo');
         return $this->response(($user));
     }
