@@ -149,10 +149,10 @@ class ContestController extends APIController
             }
         } else {
             $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
-        }
-        $user = fauth()->user();
-        if($user && count($user->contest) > 0){
-            $contests['current'] = $user->contest;
+            $user = fauth()->user();
+            if($user && count($user->contest) > 0){
+                $contests['current'] = $user->contest;
+            }
         }
         return $this->response($contests);
     }
