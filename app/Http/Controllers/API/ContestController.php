@@ -141,7 +141,7 @@ class ContestController extends APIController
                         break;
                     case 'joined';
                         $query = $query->whereHas('members', function ($query) {
-                            $query->where('members.id', fauth()->id());
+                            $query->where('users.id', fauth()->id());
                         });
                         break;
                 }
