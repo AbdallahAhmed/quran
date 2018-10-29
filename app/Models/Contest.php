@@ -15,7 +15,7 @@ class Contest extends Model
      *
      * @var array
      */
-    protected $appends = ['is_expired', 'is_joined', 'member_counter', 'is_opened'];
+    protected $appends = ['is_expired', 'is_joined', 'member_counter', 'is_opened', 'remaining_time'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -132,6 +132,15 @@ class Contest extends Model
     public function members()
     {
         return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id')->withPivot(['join_at']);
+    }
+
+    /**
+     *  Add remaining_time property
+     * @return bool
+     */
+    public function getRemainingTimeAttribute()
+    {
+        return $this->start_at->diffInHours($this->expired_at) . ':' . $this->start_at->diff($this->expired_at)->format('%I:%S');
     }
 
 }
