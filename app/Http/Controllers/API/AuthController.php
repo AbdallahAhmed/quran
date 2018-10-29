@@ -73,8 +73,6 @@ class AuthController extends APIController
     {
 
 
-
-
         app()->setLocale($request->get('lang', "ar"));
 
 
