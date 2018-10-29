@@ -20,7 +20,7 @@ Route::post('/auth/verify', 'API\AuthController@verify');
 Route::post('/auth/forget-password', 'API\AuthController@forgetPassword');
 Route::post('/auth/reset-password', 'API\AuthController@resetPassword');
 
-Route::post('/register', 'API\AuthController@register');
+Route::post('/add_user', 'API\AuthController@register');
 
 Route::get('/page', 'API\PageController@index');
 Route::get('/ayah', 'API\AyatController@index');
