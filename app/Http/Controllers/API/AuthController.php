@@ -103,7 +103,7 @@ class AuthController extends APIController
         $user->username = $request->get('email');
         $user->email = $request->get('email');
         $user->password = ($request->get('password'));
-        $names = explode(' ', $request->get('name'));
+        $names = preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
         $user->first_name = isset($names[0]) ? $names[0] : '';
         $user->last_name = isset($names[1]) ? $names[1] : '';
         $user->api_token = str_random(60);
@@ -231,7 +231,7 @@ class AuthController extends APIController
 
 
         if ($request->filled('name')) {
-            $names = explode(' ', $request->get('name'));
+            $names =  preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
             $user->first_name = isset($names[0]) ? $names[0] : '';
             $user->last_name = isset($names[1]) ? $names[1] : '';
         }
