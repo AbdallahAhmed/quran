@@ -75,7 +75,7 @@ class ContestController extends APIController
         }
 
         if (count(fauth()->user()->contest) > 0) {
-            ContestMember::where(['contest_id' => fauth()->user()->contest->id, 'member_id' => fauth()->id()])->delete();
+            ContestMember::where(['contest_id' => fauth()->user()->contest()->first()->id, 'member_id' => fauth()->id()])->delete();
             //return $this->errorResponse(['You have to get out from current contest']);
         }
 
