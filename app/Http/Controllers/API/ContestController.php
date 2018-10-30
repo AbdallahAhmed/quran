@@ -176,7 +176,7 @@ class ContestController extends APIController
             return $this->errorResponse(['Contest not founded'], 404);
         }
         if(fauth()->user() && count(fauth()->user()->contest) > 0){
-            $contests['current'] = fauth()->user()->contest;
+            $contest['current'] = fauth()->user()->contest;
         }
 
         return $this->response($contest);
