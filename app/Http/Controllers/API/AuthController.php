@@ -257,7 +257,7 @@ class AuthController extends APIController
      * POST /profile/token_reset
      * @return \Illuminate\Http\JsonResponse
      */
-    public function tokenReset()
+    public function tokenReset(Request $request)
     {
 
         app()->setLocale($request->get('lang', "ar"));
