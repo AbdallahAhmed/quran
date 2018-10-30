@@ -72,11 +72,7 @@ class AuthController extends APIController
     public function register(Request $request)
     {
 
-
-
-
         app()->setLocale($request->get('lang', "ar"));
-
 
 
         $validator = Validator::make($request->all(), [
@@ -87,7 +83,6 @@ class AuthController extends APIController
 
         $media = null;
         $imageData = null;
-
         if ($request->filled('image_data')) {
             $media = new Media();
             $imageData = explode('base64,', $request->get('image_data'));
@@ -108,7 +103,7 @@ class AuthController extends APIController
         $user->username = $request->get('email');
         $user->email = $request->get('email');
         $user->password = ($request->get('password'));
-        $names = explode(' ', $request->get('name'));
+        $names = preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
         $user->first_name = isset($names[0]) ? $names[0] : '';
         $user->last_name = isset($names[1]) ? $names[1] : '';
         $user->api_token = str_random(60);
@@ -128,6 +123,7 @@ class AuthController extends APIController
 
 
         Mail::to($user->email)->send(new VerificationMail($user));
+
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
 
@@ -235,7 +231,7 @@ class AuthController extends APIController
 
 
         if ($request->filled('name')) {
-            $names = explode(' ', $request->get('name'));
+            $names =  preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
             $user->first_name = isset($names[0]) ? $names[0] : '';
             $user->last_name = isset($names[1]) ? $names[1] : '';
         }
@@ -250,6 +246,8 @@ class AuthController extends APIController
             $user->photo_id = $media->id;
         }
         $user->save();
+
+        $user['current_khatema'] = $user->PendingKhatema()->first();
 
         $user->load('photo');
         return $this->response(($user));
