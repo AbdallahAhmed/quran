@@ -31,6 +31,7 @@ class SuratController extends APIController
             }
 
             $surah->juz_name = $ayat[0]->juz_name;
+            $surah->juz_id = $ayat[0]->juz_id;
             $surah->pages = $ayat->groupBy('page_id');
             return $this->response($surah);
         }
