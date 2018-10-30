@@ -75,7 +75,8 @@ class ContestController extends APIController
         }
 
         if (count(fauth()->user()->contest) > 0) {
-            return $this->errorResponse(['You have to get out from current contest']);
+            ContestMember::where(['contest_id' => fauth()->user()->contest()->first()->id, 'member_id' => fauth()->id()])->delete();
+            //return $this->errorResponse(['You have to get out from current contest']);
         }
 
         ContestMember::create([
@@ -151,13 +152,14 @@ class ContestController extends APIController
                         break;
                 }
                 $contests[$singleStatus] = $query->get();
+                $contests['current'] = fauth()->user()->contest;
             }
         } else {
-            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
             $user = fauth()->user();
             if ($user && count($user->contest) > 0) {
                 $contests['current'] = $user->contest;
             }
+            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
         }
         return $this->response($contests);
     }
@@ -174,6 +176,10 @@ class ContestController extends APIController
         if (!$contest) {
             return $this->errorResponse(['Contest not founded'], 404);
         }
+        if(fauth()->user() && count(fauth()->user()->contest) > 0){
+            $contest['current'] = fauth()->user()->contest;
+        }
+
         return $this->response($contest);
     }
 
