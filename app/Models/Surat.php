@@ -21,7 +21,7 @@ class Surat extends Model
     /**
      * @var array
      */
-    protected $hidden = ["englishname", "englishtranslation"];
+    protected $hidden = [ "englishtranslation"];
 
     /**
      * The accessors to append to the model's array form.
