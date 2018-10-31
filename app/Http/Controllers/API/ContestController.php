@@ -152,12 +152,12 @@ class ContestController extends APIController
                         break;
                 }
                 $contests[$singleStatus] = $query->get();
-                $contests['current'] = fauth()->user() ? fauth()->user()->contest : null;
+                $contests['current'] = fauth()->user() ? fauth()->user()->contest->load('creator') : null;
             }
         } else {
             $user = fauth()->user();
             if ($user && count($user->contest) > 0) {
-                $contests['current'] = $user->contest;
+                $contests['current'] = $user->contest->load('creator');
             }
             $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
         }
@@ -177,7 +177,7 @@ class ContestController extends APIController
             return $this->errorResponse(['Contest not founded'], 404);
         }
         if(fauth()->user() && count(fauth()->user()->contest) > 0){
-            $contest['current'] = fauth()->user()->contest;
+            $contest['current'] = fauth()->user()->contest->load('creator');
         }
 
         return $this->response($contest);
