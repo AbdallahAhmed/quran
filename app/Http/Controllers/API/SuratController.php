@@ -26,11 +26,12 @@ class SuratController extends APIController
 
             $ayat = $surah->ayat()->get();
 
-            if($lang == "en"){
+            if ($lang == "en") {
                 $surah->name = $surah->englishname;
             }
 
             $surah->juz_name = $ayat[0]->juz_name;
+            $surah->juz_name_en = juz_name($ayat[0]->juz_id, "en");
             $surah->juz_id = $ayat[0]->juz_id;
             $surah->pages = $ayat->groupBy('page_id');
             return $this->response($surah);
