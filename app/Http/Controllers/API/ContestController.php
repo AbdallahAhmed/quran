@@ -152,7 +152,7 @@ class ContestController extends APIController
                         break;
                 }
                 $contests[$singleStatus] = $query->get();
-                $contests['current'] = fauth()->user() ? fauth()->user()->contest;
+                $contests['current'] = fauth()->user() ? fauth()->user()->contest : null;
             }
         } else {
             $user = fauth()->user();
