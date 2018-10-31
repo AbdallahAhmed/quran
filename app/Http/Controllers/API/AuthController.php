@@ -122,7 +122,7 @@ class AuthController extends APIController
         $user['current_khatema'] = $user->PendingKhatema()->first();
 
 
-        Mail::to($user->email)->send(new VerificationMail($user));
+        Mail::to($user->email)->send(new WelcomeMail($user));
 
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
@@ -257,7 +257,7 @@ class AuthController extends APIController
      * POST /profile/token_reset
      * @return \Illuminate\Http\JsonResponse
      */
-    public function tokenReset()
+    public function tokenReset(Request $request)
     {
 
         app()->setLocale($request->get('lang', "ar"));
