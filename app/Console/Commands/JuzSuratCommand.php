@@ -49,7 +49,7 @@ class JuzSuratCommand extends Command
 
             $swar = [];
             foreach ($grouped as $item => $ayat) {
-                $swar[] = Surat::find($item);
+                $swar[] = Surat::find($item);;
             }
 
             $juz['swar'] = $swar;
