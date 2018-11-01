@@ -6,6 +6,7 @@ use App\Mail\PasswordChangedMail;
 use App\Mail\ResetPasswordMail;
 use App\Mail\VerificationMail;
 use App\Mail\WelcomeMail;
+use App\Models\Khatema;
 use App\Models\Media;
 use App\User;
 use Illuminate\Http\Request;
@@ -119,6 +120,12 @@ class AuthController extends APIController
         $user->save();
         $user->load('photo');
 
+        $khatema =  Khatema::create([
+            'pages'=>'[]',
+            'user_id'=>$user->id,
+            'created_at'=>Carbon::now()
+        ]);
+
         $user['current_khatema'] = $user->PendingKhatema()->first();
 
 
@@ -231,7 +238,7 @@ class AuthController extends APIController
 
 
         if ($request->filled('name')) {
-            $names =  preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
+            $names = preg_split('/\s+/', $request->get('name'), -1, PREG_SPLIT_NO_EMPTY);
             $user->first_name = isset($names[0]) ? $names[0] : '';
             $user->last_name = isset($names[1]) ? $names[1] : '';
         }
