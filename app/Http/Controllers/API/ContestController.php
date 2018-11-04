@@ -38,7 +38,9 @@ class ContestController extends APIController
             'goal' => $request->get('goal'),
             'start_at' => $request->get('start_at'),
             'expired_at' => $request->get('expired_at'),
-            'user_id' => fauth()->id()
+            'user_id' => fauth()->id(),
+            'juz_from' => $request->get('juz_from'),
+            'juz_to' => $request->get('juz_to'),
         ]);
 
         $contest->load(['creator', 'winner']);
@@ -176,7 +178,7 @@ class ContestController extends APIController
         if (!$contest) {
             return $this->errorResponse(['Contest not founded'], 404);
         }
-        if(fauth()->user() && count(fauth()->user()->contest) > 0){
+        if (fauth()->user() && count(fauth()->user()->contest) > 0) {
             $contest['current'] = fauth()->user()->contest->load('creator');
         }
 
@@ -198,5 +200,37 @@ class ContestController extends APIController
             return $this->response($contest[0]);
         }
         return $this->errorResponse(['You are not joined to any opened Contests']);
+    }
+
+
+    /**
+     * GET /contests/updates
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updates(Request $request)
+    {
+
+        $contest = fauth()->user()->contest;
+        if (count($contest) > 0) {
+            $contest = $contest[0];
+            $pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
+
+            if ($request->filled('page_id')) {
+                $pages[] = $request->get('page_id');
+                $pages = array_unique($pages);
+            }
+
+            if ($request->filled('pages')) {
+                $pages = array_unique(array_merge($pages, $request->get('pages', [])));
+            }
+
+            $contest->pivot->pages = json_encode($pages);
+
+            $contest->pivot->save();
+            return 'done';
+        }
+
+        return 'no contest to update';
     }
 }

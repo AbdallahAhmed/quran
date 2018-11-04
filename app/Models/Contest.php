@@ -34,7 +34,7 @@ class Contest extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'goal', 'user_id', 'expired_at', 'start_at'
+        'name', 'goal', 'user_id', 'expired_at', 'start_at','juz_from','juz_to'
     ];
 
 

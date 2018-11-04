@@ -46,6 +46,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
     $router->post('contests/join', 'API\ContestController@join');
     $router->post('contests/leave', 'API\ContestController@leave');
     $router->get('contests/current', 'API\ContestController@current');
+    $router->post('contests/updates', 'API\ContestController@updates');
 
     // bookmarks
     $router->get('bookmarks', 'API\BookmarkController@index');
