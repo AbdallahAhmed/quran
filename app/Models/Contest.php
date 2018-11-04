@@ -131,7 +131,7 @@ class Contest extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id')->withPivot(['join_at']);
+        return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id')->withPivot(['join_at','pages']);
     }
 
     /**
