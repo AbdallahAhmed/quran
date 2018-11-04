@@ -103,7 +103,7 @@ class Contest extends Model
      */
     public function getIsOpenedAttribute()
     {
-        return $this->expired_at >= Carbon::now() && $this->start_at <= Carbon::now();
+        return $this->expired_at >= Carbon::now();
     }
 
 
