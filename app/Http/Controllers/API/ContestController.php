@@ -20,7 +20,7 @@ class ContestController extends APIController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5',
-            'goal' => 'required|min:10',
+            /*'goal' => 'required|min:10',*/
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'expired_at' => 'required|date_format:Y-m-d H:i:s',
         ]);
