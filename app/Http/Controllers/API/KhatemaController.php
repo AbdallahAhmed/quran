@@ -44,6 +44,7 @@ class KhatemaController extends APIController
         $khatema->completed_pages = $request->get('completed_pages', 0);
         $khatema->completed = $request->get('completed', 0);
         $khatema->pages = json_encode($request->get('pages', []));
+        $khatema->remaining_pages = 604 - count(json_decode($request->get('pages', null)));
         $khatema->taken_hours = $request->get('taken_hours', 0);
         $khatema->remaining_hours = $request->get('remaining_hours', 500);
         $khatema->completed_at = $completed_at;
@@ -86,6 +87,7 @@ class KhatemaController extends APIController
 
 
         $khatema->pages = json_encode(array_values($pages));
+        $khatema->remaining_pages = 604 - count($pages);
 
         $khatema->user_id = fauth()->id();
 
