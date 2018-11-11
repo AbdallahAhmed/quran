@@ -59,6 +59,7 @@ class AuthController extends APIController
         $user->load('photo');
 
         $user['current_khatema'] = $user->PendingKhatema()->first();
+        $user['last_khatema'] = $user->CompletedKhatemas()->orderBy('created_at', 'DESC')->first();
 
         return $this->response(['user' => $user, 'token' => $user->api_token]);
     }

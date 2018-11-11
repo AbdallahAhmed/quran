@@ -41,7 +41,6 @@ class KhatemaController extends APIController
         $completed_at = $request->has('completed') && $request->get('completed') == 1 ? Carbon::now() : null;
 
         $khatema->user_id = fauth()->id();
-        $khatema->completed_pages = $request->get('completed_pages', 0);
         $khatema->completed = $request->get('completed', 0);
         $khatema->pages = json_encode($request->get('pages', []));
         $khatema->remaining_pages = 604 - count(json_decode($request->get('pages', null)));
