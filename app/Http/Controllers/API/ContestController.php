@@ -131,16 +131,16 @@ class ContestController extends APIController
                 $query = Contest::with(['creator', 'winner'])->take($limit)->offset($offset);
                 switch ($singleStatus) {
                     case 'coming';
-                        $query = $query->coming();
+                        $query = $query->coming()->orderBy('created_at', 'DESC');
                         break;
                     case 'opened';
-                        $query = $query->opened();
+                        $query = $query->opened()->orderBy('created_at', 'DESC');
                         break;
                     case 'expired';
-                        $query = $query->expired();
+                        $query = $query->expired()->orderBy('created_at', 'DESC');
                         break;
                     case 'all';
-                        $query = $query->where('expired_at', '>', Carbon::now());
+                        $query = $query->where('expired_at', '>', Carbon::now())->orderBy('created_at', 'DESC');
                         break;
                     case 'joined';
                         $query = $query->whereHas('members', function ($query) {
@@ -161,7 +161,7 @@ class ContestController extends APIController
             if ($user && count($user->contest) > 0) {
                 $contests['current'] = $user->contest->load('creator');
             }
-            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
+            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->orderBy('created_at')->get();
         }
         return $this->response($contests);
     }
