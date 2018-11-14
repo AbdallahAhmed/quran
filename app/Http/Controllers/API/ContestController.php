@@ -81,6 +81,10 @@ class ContestController extends APIController
             //return $this->errorResponse(['You have to get out from current contest']);
         }
 
+        if($contest->winner_id == 0){
+            $contest->winner_id = fauth()->user()->id;
+            $contest->save();
+        }
         ContestMember::create([
             'contest_id' => $request->get('contest_id'),
             'member_id' => fauth()->id()
@@ -246,25 +250,33 @@ class ContestController extends APIController
      */
     public function checkWinner($pages, $contest)
     {
-        $juz_from = (int)$contest->juz_from;
-        $juz_to = (int)$contest->juz_to;
+        $winner_pages = ContestMember::where([
+                ['contest_id', $contest->id],
+                ['member_id', $contest->winner_id]
+            ]
+        )->first()->pages;
+        $winner_pages = json_decode($winner_pages) ? json_decode($winner_pages) : [];
 
-        $contest_pages = array();
-        $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+        if(count($winner_pages) < count($pages)){
+            $juz_from = (int)$contest->juz_from;
+            $juz_to = (int)$contest->juz_to;
+            $contest_pages = array();
+            $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+            foreach ($juz_pages as $key => $value) {
+                if ($key >= $juz_from && $key <= $juz_to) {
+                    $contest_pages = array_merge($contest_pages, $value);
+                }
+            }
+            $contest_pages = array_unique($contest_pages);
+            sort($contest_pages);
+            sort($pages);
 
-
-        foreach ($juz_pages as $key => $value) {
-            if ($key >= $juz_from && $key <= $juz_to) {
-                $contest_pages = array_merge($contest_pages,$value);
+            if ($contest_pages == $pages) {
+                Contest::where('id', $contest->id)->update([
+                    'winner_id' => fauth()->user()->id,
+                ]);
             }
         }
-        $contest_pages = array_unique($contest_pages);
-        sort($contest_pages);
-        sort($pages);
-        if($contest_pages == $pages){
-            Contest::where('id', $contest->id)->update([
-               'winner_id' => fauth()->user()->id
-            ]);
-        }
+
     }
 }

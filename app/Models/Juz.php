@@ -12,7 +12,7 @@ class Juz extends Model
      * @var string
      */
     protected $table = 'juz';
-
+public $timestamps = false;
     /**
      *  Ayat relation
      * @return \Illuminate\Database\Eloquent\Relations\hasmany
