@@ -73,17 +73,18 @@ class KhatemaController extends APIController
             $pages = array_unique($pages);
         }
 
+        $pages = $pages ? $pages : [];
+        $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', [])) : [];
+
 
         if ($request->filled('pages')) {
-            $pages = array_unique(array_merge($pages, $request->get('pages', [])));
+            $pages = array_unique(array_merge($pages, $new_pages));
         }
-
 
         if ($request->filled('completed') || count($pages) >= 604) {
             $khatema->completed = $request->get('completed', 1);
             $khatema->completed_at = Carbon::now();
         }
-
 
         $khatema->pages = json_encode(array_values($pages));
         $khatema->remaining_pages = 604 - count($pages);

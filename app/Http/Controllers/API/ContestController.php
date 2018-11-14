@@ -221,16 +221,50 @@ class ContestController extends APIController
                 $pages = array_unique($pages);
             }
 
+            $pages = $pages ? $pages : [];
+            $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', [])) : [];
             if ($request->filled('pages')) {
-                $pages = array_unique(array_merge($pages, $request->get('pages', [])));
+                $pages = array_unique(array_merge($pages, $new_pages));
             }
 
             $contest->pivot->pages = json_encode($pages);
 
             $contest->pivot->save();
+
+            $this->checkWinner($pages, $contest);
+
             return 'done';
         }
 
         return 'no contest to update';
+    }
+
+    /**
+     * GET /contests/updates
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkWinner($pages, $contest)
+    {
+        $juz_from = (int)$contest->juz_from;
+        $juz_to = (int)$contest->juz_to;
+
+        $contest_pages = array();
+        $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+
+
+        foreach ($juz_pages as $key => $value) {
+            if ($key >= $juz_from && $key <= $juz_to) {
+                $contest_pages = array_merge($contest_pages,$value);
+            }
+        }
+        $contest_pages = array_unique($contest_pages);
+        sort($contest_pages);
+        sort($pages);
+        if($contest_pages == $pages){
+            Contest::where('id', $contest->id)->update([
+               'winner_id' => fauth()->user()->id
+            ]);
+        }
     }
 }
