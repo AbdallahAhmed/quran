@@ -6,6 +6,7 @@ use App\Models\Ayat;
 use App\Models\Contest;
 use App\Models\Khatema;
 use App\Models\Media;
+use App\Models\Token;
 use Illuminate\Support\Carbon;
 
 
@@ -88,5 +89,9 @@ class User extends \Dot\Users\Models\User
         return $this->belongsToMany(Ayat::class, 'users_ayat','user_id', 'ayah_id');
     }
 
+    public function devices()
+    {
+        return $this->belongsToMany(Token::class, "users_tokens", "user_id", "token_id");
+    }
 
 }
