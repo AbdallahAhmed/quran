@@ -59,9 +59,9 @@ class AuthController extends APIController
         $device_token = $request->get('device_token');
         $token = Token::where('device_token', $device_token)->get();
         $token_id = "";
-        if(count($token) > 0){
+        if (count($token) > 0) {
             $token_id = $token->id;
-        }else{
+        } else {
             $token = new Token();
             $token->device_token = $device_token;
             $token->save();
@@ -134,23 +134,18 @@ class AuthController extends APIController
         $user->save();
 
         $device_token = $request->get('device_token');
-        $token = Token::where('device_token', $device_token)->get();
-        $token_id = "";
-        if(count($token) > 0){
-            $token_id = $token->id;
-        }else{
-            $token = new Token();
-            $token->device_token = $device_token;
-            $token->save();
-            $token_id = $token->id;
-        }
-        $user->devices()->syncWithoutDetaching($token_id);
+        $token = new Token();
+        $token->device_token = $device_token;
+        $token->save();
+        $token_id = $token->id;
+        $user->devices()->sync($token_id);
+
         $user->load('photo');
 
-        $khatema =  Khatema::create([
-            'pages'=>'[]',
-            'user_id'=>$user->id,
-            'created_at'=>Carbon::now()
+        $khatema = Khatema::create([
+            'pages' => '[]',
+            'user_id' => $user->id,
+            'created_at' => Carbon::now()
         ]);
 
         $user['current_khatema'] = $user->PendingKhatema()->first();
