@@ -12,6 +12,7 @@ use App\Models\Token;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -133,11 +134,13 @@ class AuthController extends APIController
         $user->role_id = 2;
         $user->save();
 
-        $device_token = $request->get('device_token');
+        Log::debug($request->get('device_token'));
+
+        /*$device_token = $request->get('device_token');
         $token = new Token();
         $token->device_token = $device_token;
         $token->save();
-        $user->devices()->sync($token->id);
+        $user->devices()->sync($token->id);*/
 
         $user->load('photo');
 
