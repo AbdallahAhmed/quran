@@ -56,7 +56,7 @@ class AuthController extends APIController
         $user->last_login = Carbon::now()->getTimestamp();
 
         $user->save();
-        $device_token = $request->get('device_token');
+/*        $device_token = $request->get('device_token');
         $token = Token::where('device_token', $device_token)->get();
         $token_id = "";
         if (count($token) > 0) {
@@ -67,7 +67,7 @@ class AuthController extends APIController
             $token->save();
             $token_id = $token->id;
         }
-        $user->devices()->syncWithoutDetaching($token_id);
+        $user->devices()->syncWithoutDetaching($token_id);*/
 
         $user->load('photo');
 
@@ -133,12 +133,12 @@ class AuthController extends APIController
         $user->role_id = 2;
         $user->save();
 
-        $device_token = $request->get('device_token');
+       /* $device_token = $request->get('device_token');
         $token = new Token();
         $token->device_token = $device_token;
         $token->save();
         $token_id = $token->id;
-        $user->devices()->sync($token_id);
+        $user->devices()->sync($token_id);*/
 
         $user->load('photo');
 
