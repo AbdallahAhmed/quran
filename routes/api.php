@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Juz;
 use Illuminate\Http\Request;
 
 /*
@@ -19,7 +20,6 @@ Route::get('/auth/resendCode', 'API\AuthController@resendCode');
 Route::post('/auth/verify', 'API\AuthController@verify');
 Route::post('/auth/forget-password', 'API\AuthController@forgetPassword');
 Route::post('/auth/reset-password', 'API\AuthController@resetPassword');
-
 Route::post('/auth/add_user', 'API\AuthController@register');
 
 Route::get('/page', 'API\PageController@index');
@@ -35,7 +35,7 @@ Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
-
+    Route::get('/send', 'API\NotificationController@send');
     // profile
     $router->post('/profile/update', 'API\AuthController@update');
     $router->get('/profile/token_reset', 'API\AuthController@tokenReset');

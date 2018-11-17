@@ -33,3 +33,14 @@ if (!function_exists('juz_name')) {
         return 'juz\' ' . $number;
     }
 }
+
+/*if(!function_exists('juz_pages')){
+    function juz_pages($juz_number){
+        $juz = \App\Models\Juz::find($juz_number);
+        $pages = array();
+        foreach ($juz->pages as $page)
+            $pages[] = $page->id;
+
+        return $pages;
+    }
+}*/

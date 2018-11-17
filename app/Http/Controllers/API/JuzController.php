@@ -35,6 +35,6 @@ class JuzController extends APIController
      * @return \Illuminate\Http\JsonResponse
      */
     public function sections(){
-        return response()->json(json_decode(file_get_contents(public_path('api/juz_surat.json'))));
+        return response()->json(json_decode(file_get_contents(public_path('api/juz_surat.json')), false));
     }
 }

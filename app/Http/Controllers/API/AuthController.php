@@ -8,6 +8,7 @@ use App\Mail\VerificationMail;
 use App\Mail\WelcomeMail;
 use App\Models\Khatema;
 use App\Models\Media;
+use App\Models\Token;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -55,10 +56,23 @@ class AuthController extends APIController
         $user->last_login = Carbon::now()->getTimestamp();
 
         $user->save();
+        $device_token = $request->get('device_token');
+        $token = Token::where('device_token', $device_token)->get();
+        $token_id = "";
+        if (count($token) > 0) {
+            $token_id = $token->id;
+        } else {
+            $token = new Token();
+            $token->device_token = $device_token;
+            $token->save();
+            $token_id = $token->id;
+        }
+        $user->devices()->syncWithoutDetaching($token_id);
 
         $user->load('photo');
 
         $user['current_khatema'] = $user->PendingKhatema()->first();
+        $user['last_khatema'] = $user->CompletedKhatemas()->orderBy('created_at', 'DESC')->first();
 
         return $this->response(['user' => $user, 'token' => $user->api_token]);
     }
@@ -118,12 +132,20 @@ class AuthController extends APIController
         }
         $user->role_id = 2;
         $user->save();
+
+        $device_token = $request->get('device_token');
+        $token = new Token();
+        $token->device_token = $device_token;
+        $token->save();
+        $token_id = $token->id;
+        $user->devices()->sync($token_id);
+
         $user->load('photo');
 
-        $khatema =  Khatema::create([
-            'pages'=>'[]',
-            'user_id'=>$user->id,
-            'created_at'=>Carbon::now()
+        $khatema = Khatema::create([
+            'pages' => '[]',
+            'user_id' => $user->id,
+            'created_at' => Carbon::now()
         ]);
 
         $user['current_khatema'] = $user->PendingKhatema()->first();

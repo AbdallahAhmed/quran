@@ -20,7 +20,7 @@ class ContestController extends APIController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5',
-            'goal' => 'required|min:10',
+            /*'goal' => 'required|min:10',*/
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'expired_at' => 'required|date_format:Y-m-d H:i:s',
         ]);
@@ -81,6 +81,10 @@ class ContestController extends APIController
             //return $this->errorResponse(['You have to get out from current contest']);
         }
 
+        if($contest->winner_id == 0){
+            $contest->winner_id = fauth()->user()->id;
+            $contest->save();
+        }
         ContestMember::create([
             'contest_id' => $request->get('contest_id'),
             'member_id' => fauth()->id()
@@ -131,16 +135,16 @@ class ContestController extends APIController
                 $query = Contest::with(['creator', 'winner'])->take($limit)->offset($offset);
                 switch ($singleStatus) {
                     case 'coming';
-                        $query = $query->coming();
+                        $query = $query->coming()->orderBy('created_at', 'DESC');
                         break;
                     case 'opened';
-                        $query = $query->opened();
+                        $query = $query->opened()->orderBy('created_at', 'DESC');
                         break;
                     case 'expired';
-                        $query = $query->expired();
+                        $query = $query->expired()->orderBy('created_at', 'DESC');
                         break;
                     case 'all';
-                        $query = $query->where('expired_at', '>', Carbon::now());
+                        $query = $query->where('expired_at', '>', Carbon::now())->orderBy('created_at', 'DESC');
                         break;
                     case 'joined';
                         $query = $query->whereHas('members', function ($query) {
@@ -161,7 +165,7 @@ class ContestController extends APIController
             if ($user && count($user->contest) > 0) {
                 $contests['current'] = $user->contest->load('creator');
             }
-            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->get();
+            $contests = Contest::with(['creator', 'winner'])->take($limit)->offset($offset)->orderBy('created_at')->get();
         }
         return $this->response($contests);
     }
@@ -221,16 +225,58 @@ class ContestController extends APIController
                 $pages = array_unique($pages);
             }
 
+            $pages = $pages ? $pages : [];
+            $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', [])) : [];
             if ($request->filled('pages')) {
-                $pages = array_unique(array_merge($pages, $request->get('pages', [])));
+                $pages = array_unique(array_merge($pages, $new_pages));
             }
 
             $contest->pivot->pages = json_encode($pages);
 
             $contest->pivot->save();
+
+            $this->checkWinner($pages, $contest);
+
             return 'done';
         }
 
         return 'no contest to update';
+    }
+
+    /**
+     * GET /contests/updates
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkWinner($pages, $contest)
+    {
+        $winner_pages = ContestMember::where([
+                ['contest_id', $contest->id],
+                ['member_id', $contest->winner_id]
+            ]
+        )->first()->pages;
+        $winner_pages = json_decode($winner_pages) ? json_decode($winner_pages) : [];
+
+        if(count($winner_pages) < count($pages)){
+            $juz_from = (int)$contest->juz_from;
+            $juz_to = (int)$contest->juz_to;
+            $contest_pages = array();
+            $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+            foreach ($juz_pages as $key => $value) {
+                if ($key >= $juz_from && $key <= $juz_to) {
+                    $contest_pages = array_merge($contest_pages, $value);
+                }
+            }
+            $contest_pages = array_unique($contest_pages);
+            sort($contest_pages);
+            sort($pages);
+
+            if ($contest_pages == $pages) {
+                Contest::where('id', $contest->id)->update([
+                    'winner_id' => fauth()->user()->id,
+                ]);
+            }
+        }
+
     }
 }

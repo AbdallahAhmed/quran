@@ -12,7 +12,7 @@ class Juz extends Model
      * @var string
      */
     protected $table = 'juz';
-
+public $timestamps = false;
     /**
      *  Ayat relation
      * @return \Illuminate\Database\Eloquent\Relations\hasmany
@@ -29,5 +29,12 @@ class Juz extends Model
     public function surat()
     {
         return $this->belongsToMany(Surat::class, 'ayat', 'juz_id', 'surat_id')->distinct('surat_id');
+    }
+    /**
+     *  Surat relation
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function pages(){
+        return $this->belongsToMany(Page::class, 'ayat', 'juz_id', 'page_id')->distinct('page_id');
     }
 }
