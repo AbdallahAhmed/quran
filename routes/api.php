@@ -58,6 +58,9 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
     $router->get('khatemas', 'API\KhatemaController@index');
     $router->post('khatemas/create', 'API\KhatemaController@create');
     $router->post('khatemas/update', 'API\KhatemaController@update');
+
+    //notifications
+    $router->get('notifications', 'API\NotificationController@index');
 });
 
 
