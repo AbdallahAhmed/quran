@@ -38,8 +38,9 @@ class NotifyByWinner
                 $tokens[] = Token::find($device->token_id)->device_token;
             }
         }
+        app()->setLocale('ar');
         $title = trans('app.winner');
-        $body = str_replace(":name", fauth()->user()->name, trans('app.contest_winner'));
+        $body = str_replace(":name", "Abdallah", trans('app.contest_winner'));
         $body = str_replace(":contest", $event->contest->name, $body);
         $notification = new NotificationController($title, $body);
         $notification->sendGroup($tokens);

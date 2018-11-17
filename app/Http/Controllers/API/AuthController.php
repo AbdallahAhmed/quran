@@ -137,8 +137,7 @@ class AuthController extends APIController
         $token = new Token();
         $token->device_token = $device_token;
         $token->save();
-        $token_id = $token->id;
-        $user->devices()->sync($token_id);
+        $user->devices()->sync($token->id);
 
         $user->load('photo');
 
