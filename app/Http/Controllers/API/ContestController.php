@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\ContestCreated;
+use App\Events\ContestJoin;
 use App\Models\Contest;
 use App\Models\ContestMember;
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class ContestController extends APIController
      */
     public function create(Request $request)
     {
+        //app()->setLocale($request->get('lang'));
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5',
             /*'goal' => 'required|min:10',*/
@@ -43,6 +46,8 @@ class ContestController extends APIController
             'juz_to' => $request->get('juz_to'),
         ]);
 
+        event(new ContestCreated($contest));
+
         $contest->load(['creator', 'winner']);
 
         ContestMember::create([
@@ -61,6 +66,8 @@ class ContestController extends APIController
      */
     public function join(Request $request)
     {
+       // app()->setLocale($request->get('lang'));
+
 
         $validator = Validator::make($request->all(), [
             'contest_id' => 'required'
@@ -81,10 +88,11 @@ class ContestController extends APIController
             //return $this->errorResponse(['You have to get out from current contest']);
         }
 
-        if($contest->winner_id == 0){
+        if ($contest->winner_id == 0) {
             $contest->winner_id = fauth()->user()->id;
             $contest->save();
         }
+        event(new ContestJoin(fauth()->user(), $contest->user_id));
         ContestMember::create([
             'contest_id' => $request->get('contest_id'),
             'member_id' => fauth()->id()
@@ -257,7 +265,7 @@ class ContestController extends APIController
         )->first()->pages;
         $winner_pages = json_decode($winner_pages) ? json_decode($winner_pages) : [];
 
-        if(count($winner_pages) < count($pages)){
+        if (count($winner_pages) < count($pages)) {
             $juz_from = (int)$contest->juz_from;
             $juz_to = (int)$contest->juz_to;
             $contest_pages = array();
