@@ -13,9 +13,12 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'App\Events\ContestCreated' => [
+            'App\Listeners\NewContestNotify',
         ],
+        'App\Events\ContestJoin' => [
+            'App\Listeners\NotifyContestOwner'
+        ]
     ];
 
     /**
