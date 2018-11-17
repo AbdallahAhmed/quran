@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Events\ContestCreated;
 use App\Events\ContestJoin;
+use App\Events\ContestWinner;
 use App\Models\Contest;
 use App\Models\ContestMember;
 use Illuminate\Http\Request;
@@ -243,6 +244,7 @@ class ContestController extends APIController
 
             $contest->pivot->save();
 
+
             $this->checkWinner($pages, $contest);
 
             return 'done';
@@ -280,6 +282,12 @@ class ContestController extends APIController
             sort($pages);
 
             if ($contest_pages == $pages) {
+                Contest::where('id', $contest->id)->update([
+                    'winner_id' => fauth()->user()->id,
+                    'closed_to_winner' => 1
+                ]);
+                event(new ContestWinner($contest));
+            }else{
                 Contest::where('id', $contest->id)->update([
                     'winner_id' => fauth()->user()->id,
                 ]);

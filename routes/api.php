@@ -30,12 +30,14 @@ Route::get('/JuzAll', 'API\JuzController@JuzAll');
 Route::get('/juz', 'API\JuzController@index');
 Route::get('/juz/sections', 'API\JuzController@sections');
 
-
+Route::get('/sas', function (){
+   event(new \App\Events\ContestWinner(\App\Models\Contest::find(3)));
+});
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
-    Route::get('/send', 'API\NotificationController@send');
+
     // profile
     $router->post('/profile/update', 'API\AuthController@update');
     $router->get('/profile/token_reset', 'API\AuthController@tokenReset');

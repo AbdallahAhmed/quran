@@ -15,7 +15,7 @@ class Contest extends Model
      *
      * @var array
      */
-    protected $appends = ['is_expired', 'is_joined', 'member_counter', 'is_opened', 'remaining_time'];
+    protected $appends = ['is_expired', 'is_joined', 'member_counter', 'is_opened', 'remaining_time', 'closed_to_winner'];
 
     /**
      * The attributes that should be mutated to dates.

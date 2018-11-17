@@ -18,7 +18,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\ContestJoin' => [
             'App\Listeners\NotifyContestOwner'
-        ]
+        ],
+        'App\Events\ContestWinner' => [
+            'App\Listeners\NotifyByWinner'
+        ],
     ];
 
     /**

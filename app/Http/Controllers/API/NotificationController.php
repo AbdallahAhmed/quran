@@ -14,6 +14,7 @@ class NotificationController extends APIController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 10);
         $type = $request->get('type', "");
+        app()->setLocale($request->get('locale', 'ar'));
 
         $query = Notificate::where('user_id', fauth()->user()->id)
             ->offset($offset)

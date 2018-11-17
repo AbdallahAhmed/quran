@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Token;
+use App\Models\UsersTokens;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use LaravelFCM\Facades\FCM;
@@ -69,6 +70,16 @@ class NotificationController extends Controller
             if ($tokenToDelete->tokensToDelete != null) {
                 $token->delete();
             }
+        }
+    }
+
+    public function sendGroup($tokens)
+    {
+        $tokenToDelete = FCM::sendTo($tokens, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
+        foreach ($tokenToDelete->tokensToDelete as $td){
+            $token = Token::where('device_token', $td)->first();
+            UsersTokens::where('token_id', $token->id)->delete();
+            $token->delete();
         }
     }
 }
