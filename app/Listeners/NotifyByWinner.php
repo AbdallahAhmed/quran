@@ -40,7 +40,7 @@ class NotifyByWinner
         }
         app()->setLocale('ar');
         $title = trans('app.winner');
-        $body = str_replace(":name", "Abdallah", trans('app.contest_winner'));
+        $body = str_replace(":name", $event->contest->winner->name, trans('app.contest_winner'));
         $body = str_replace(":contest", $event->contest->name, $body);
         $notification = new NotificationController($title, $body);
         $notification->sendGroup($tokens);
