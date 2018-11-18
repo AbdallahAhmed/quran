@@ -43,7 +43,7 @@ class ContestReminderCommand extends Command
     {
         //require_once app_path('helper.php');
 
-        $users = User::with('contest')->get();
+        $users = User::whereHas('contest')->get();
         foreach ($users as $user) {
             $contest = $user->contest[0];
             $expired_at = $contest->expired_at;
@@ -70,6 +70,7 @@ class ContestReminderCommand extends Command
            "type" => "contest_reminder",
            "contest_id" => $contest->id
         );
-        $notification->send($user->devices[0]->device_token, $array);
+        if(count($user->devices) > 0)
+            $notification->send($user->devices[0]->device_token, $array);
     }
 }
