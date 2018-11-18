@@ -58,16 +58,11 @@ class AuthController extends APIController
 
         $user->save();
         $device_token = $request->get('device_token');
-        $token = Token::where([
-            ['device_token', $device_token],
-            ['user_id', $user->id]
-        ])->get();
-        if (count($token) == 0) {
-            $token = new Token();
-            $token->device_token = $device_token;
-            $token->user_id = $user->id;
-            $token->save();
-        }
+        Token::where('user_id', $user->id)->delete();
+        $token = new Token();
+        $token->device_token = $device_token;
+        $token->user_id = $user->id;
+        $token->save();
 
         $user->load('photo');
 
@@ -158,7 +153,8 @@ class AuthController extends APIController
     /**
      * GET /auth/resendCode
      */
-    public function logout(){
+    public function logout()
+    {
         Token::where('user_id', fauth()->user()->id)->delete();
     }
 
