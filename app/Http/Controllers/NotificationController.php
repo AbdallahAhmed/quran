@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Token;
-use App\Models\UsersTokens;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -73,9 +72,8 @@ class NotificationController extends Controller
         $tokens = Token::all();
         foreach ($tokens as $token) {
             $tokenToDelete = FCM::sendTo($token->device_token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
-            dd($tokenToDelete);
             if ($tokenToDelete->tokensToDelete != null) {
-               // $token->delete();
+               $token->delete();
             }
         }
     }
