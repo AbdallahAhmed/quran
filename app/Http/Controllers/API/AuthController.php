@@ -57,7 +57,7 @@ class AuthController extends APIController
         $user->last_login = Carbon::now()->getTimestamp();
 
         $user->save();
-        /*$device_token = $request->get('device_token');
+        $device_token = $request->get('device_token');
         $token = Token::where([
             ['device_token', $device_token],
             ['user_id', $user->id]
@@ -67,7 +67,7 @@ class AuthController extends APIController
             $token->device_token = $device_token;
             $token->user_id = $user->id;
             $token->save();
-        }*/
+        }
 
         $user->load('photo');
 
