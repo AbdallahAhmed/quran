@@ -132,15 +132,12 @@ class AuthController extends APIController
         }
         $user->role_id = 2;
 
-        /*$user->save();
-
-
+        $user->save();
         $device_token = $request->get('device_token');
         $token = new Token();
         $token->device_token = $device_token;
         $token->user_id = $user->id;
         $token->save();
-        */
 
         $user->load('photo');
 
