@@ -39,20 +39,17 @@ class NotificationController extends Controller
         $this->dataBuilder->addData([]);
     }
 
-    public function send($token)
+    public function send($token, $array)
     {
-        $this->dataBuilder->addData(['type' => "", 'user_token' => fauth()->user()->api_token]);
-        $tokenToDelete = FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
-        if ($tokenToDelete->tokensToDelete != null) {
-            $device = Token::where('device_token', $token)->first();
-            $device->delete();
-        }
+        if($array['type'] == "contest_reminder")
+            $this->dataBuilder->addData(['type' => $array['type'], "contest_id" => $array['contest_id']]);
+        FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
         return;
     }
 
     public function sendUser($user)
     {
-        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'user_token' => $user->api_token]);
+        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest->id, 'user_token' => $user->api_token]);
         foreach ($user->devices as $device) {
             $token = $device->device_token;
             $tokenToDelete = FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
@@ -68,7 +65,7 @@ class NotificationController extends Controller
         foreach ($users as $user){
             $api_tokens[] = $user->api_token;
         }
-        $this->dataBuilder->addData(['type' => $type, 'users_tokens' => $api_tokens]);
+        $this->dataBuilder->addData(['type' => $type, 'route' => 'contest', 'users_tokens' => $api_tokens]);
         $tokens = Token::all();
         foreach ($tokens as $token) {
             $tokenToDelete = FCM::sendTo($token->device_token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
@@ -80,7 +77,7 @@ class NotificationController extends Controller
 
     public function sendGroup($tokens, $api_tokens, $type)
     {
-        $this->dataBuilder->addData(['type' => $type, 'users_tokens' => $api_tokens]);
+        $this->dataBuilder->addData(['type' => $type, 'route' => 'contest', 'users_tokens' => $api_tokens]);
         $tokenToDelete = FCM::sendTo($tokens, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
         foreach ($tokenToDelete->tokensToDelete as $td){
             Token::where('device_token', $td)->delete();

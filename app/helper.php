@@ -44,3 +44,51 @@ if (!function_exists('juz_name')) {
         return $pages;
     }
 }*/
+
+if (!function_exists('get_contest_pages')) {
+    function get_contest_pages($juz_from, $juz_to)
+    {
+        $contest_pages = array();
+        $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+        foreach ($juz_pages as $key => $value) {
+            if ($key >= $juz_from && $key <= $juz_to) {
+                $contest_pages = array_merge($contest_pages, $value);
+            }
+        }
+        return array_unique($contest_pages);
+    }
+}
+
+if (!function_exists('remaining_time_human')) {
+    function remaining_time_human($minutes)
+    {
+        if (app()->getLocale() == "ar") {
+            switch ($minutes) {
+                case $minutes < 60:
+                    return $minutes." دقيقة";
+                case $minutes >= 60 && $minutes < 1440:
+                    return ((int)($minutes / 60)) . "ساعة ";
+                case $minutes >= 1440 && $minutes < 10080:
+                    return ((int)($minutes / 1440)) . " يوم";
+                case $minutes >= 10080 && $minutes < 43200:
+                    return ((int)($minutes / 10080)) . " اسبوع";
+                case $minutes >= 43200:
+                    return ((int)($minutes / 43200)) . " شهر";
+            }
+        } else {
+
+            switch ($minutes) {
+                case $minutes < 60:
+                    return $minutes." minute(s)";
+                case $minutes >= 60 && $minutes < 1440:
+                    return ((int)($minutes / 60)) . " hour(s)";
+                case $minutes >= 1440 && $minutes < 10080:
+                    return ((int)($minutes / 1440)) . " day(s)";
+                case $minutes >= 10080 && $minutes < 43200:
+                    return ((int)($minutes / 10080)) . " week(s)";
+                case $minutes >= 43200:
+                    return ((int)($minutes / 43200)) . " month(s)";
+            }
+        }
+    }
+}

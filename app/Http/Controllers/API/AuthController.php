@@ -57,6 +57,7 @@ class AuthController extends APIController
         $user->last_login = Carbon::now()->getTimestamp();
 
         $user->save();
+
         $device_token = $request->get('device_token');
         Token::where('user_id', $user->id)->delete();
         $token = new Token();

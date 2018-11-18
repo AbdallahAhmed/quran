@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Juz;
+use App\User;
 use Illuminate\Http\Request;
 
 /*
@@ -30,9 +31,23 @@ Route::get('/JuzAll', 'API\JuzController@JuzAll');
 Route::get('/juz', 'API\JuzController@index');
 Route::get('/juz/sections', 'API\JuzController@sections');
 
-Route::get('/sas', function (){
-   event(new \App\Events\ContestCreated(\App\Models\Contest::find(1)));
+Route::get('/sas', function () {
+    dd(remaining_time_human(10081));
+    $users = User::with('contest')->get();
+    foreach ($users as $user) {
+        $contest = $user->contest[0];
+        $expired_at = $contest->expired_at;
+        $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
+        $contest_all = $expired_at->diffInMinutes($contest->start_at);
+        $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
+       // if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
+            $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
+            $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
+            $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
+        //}
+    }
 });
+
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
