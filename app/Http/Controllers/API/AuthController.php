@@ -57,18 +57,17 @@ class AuthController extends APIController
         $user->last_login = Carbon::now()->getTimestamp();
 
         $user->save();
-        $device_token = $request->get('device_token');
-        $token = Token::where('device_token', $device_token)->get();
-        $token_id = "";
-        if (count($token) > 0) {
-            $token_id = $token->id;
-        } else {
+        /*$device_token = $request->get('device_token');
+        $token = Token::where([
+            ['device_token', $device_token],
+            ['user_id', $user->id]
+        ])->get();
+        if (count($token) == 0) {
             $token = new Token();
             $token->device_token = $device_token;
+            $token->user_id = $user->id;
             $token->save();
-            $token_id = $token->id;
-        }
-        $user->devices()->syncWithoutDetaching($token_id);
+        }*/
 
         $user->load('photo');
 
@@ -88,7 +87,7 @@ class AuthController extends APIController
     public function register(Request $request)
     {
 
-        app()->setLocale($request->get('lang', "ar"));
+        app()->setLocale($request->get('lang', "en"));
 
 
         $validator = Validator::make($request->all(), [
@@ -132,15 +131,16 @@ class AuthController extends APIController
             $user->photo_id = $media->id;
         }
         $user->role_id = 2;
-        $user->save();
 
-        Log::debug($request->get('device_token'));
+        /*$user->save();
 
-        /*$device_token = $request->get('device_token');
+
+        $device_token = $request->get('device_token');
         $token = new Token();
         $token->device_token = $device_token;
+        $token->user_id = $user->id;
         $token->save();
-        $user->devices()->sync($token->id);*/
+        */
 
         $user->load('photo');
 

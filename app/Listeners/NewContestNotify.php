@@ -33,13 +33,13 @@ class NewContestNotify
         $notification = new NotificationController(trans('app.new_contest'), trans('app.new_contest_content'));
         $users = User::whereHas('devices')->get();
         foreach ($users as $user) {
-            if ($user->id != fauth()->user()->id) {
+            //if ($user->id != fauth()->user()->id) {
                 $notify = new Notificate();
                 $notify->user_id = $user->id;
                 $notify->type = "new_contest_content";
                 $notify->save();
-            }
+           // }
         }
-        $notification->sendAll();
+        $notification->sendAll($users);
     }
 }

@@ -91,7 +91,7 @@ class User extends \Dot\Users\Models\User
 
     public function devices()
     {
-        return $this->belongsToMany(Token::class, "users_tokens", "user_id", "token_id");
+        return $this->hasMany(Token::class);
     }
 
 }

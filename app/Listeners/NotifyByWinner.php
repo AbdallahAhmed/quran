@@ -33,9 +33,9 @@ class NotifyByWinner
         $users_ids = ContestMember::where('contest_id', $event->contest->id)->pluck('member_id')->toArray();
         $tokens = array();
         foreach ($users_ids as $user_id){
-            $devices = UsersTokens::where('user_id', $user_id)->get();
+            $devices = Token::where('user_id', $user_id)->get();
             foreach ($devices as $device){
-                $tokens[] = Token::find($device->token_id)->device_token;
+                $tokens[] = $device->device_token;
             }
         }
         app()->setLocale('ar');

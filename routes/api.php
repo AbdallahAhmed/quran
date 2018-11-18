@@ -31,7 +31,7 @@ Route::get('/juz', 'API\JuzController@index');
 Route::get('/juz/sections', 'API\JuzController@sections');
 
 Route::get('/sas', function (){
-   event(new \App\Events\ContestWinner(\App\Models\Contest::find(3)));
+   event(new \App\Events\ContestCreated(\App\Models\Contest::find(1)));
 });
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
