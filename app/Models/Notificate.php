@@ -19,4 +19,8 @@ class Notificate extends Model
             return str_replace(":name", User::find($this->from_id)->name, trans('app.'.$type));
         }
     }
+
+    public function sender(){
+        return $this->hasOne(User::class, 'id', 'from_id')->with('photo');
+    }
 }
