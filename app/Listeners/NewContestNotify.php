@@ -30,12 +30,14 @@ class NewContestNotify
      */
     public function handle(ContestCreated $event)
     {
-        $notification = new NotificationController(trans('app.new_contest'), trans('app.new_contest_content'));
+        $body = str_replace(":name", $event->contest->name, trans('app.new_contest_content'));
+        $notification = new NotificationController(trans('app.new_contest'), $body);
         $users = User::whereHas('devices')->get();
         foreach ($users as $user) {
             //if ($user->id != fauth()->user()->id) {
                 $notify = new Notificate();
                 $notify->user_id = $user->id;
+                $notify->contest_id = $event->contest->id;
                 $notify->type = "new_contest_content";
                 $notify->save();
            // }

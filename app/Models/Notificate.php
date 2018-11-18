@@ -23,4 +23,8 @@ class Notificate extends Model
     public function sender(){
         return $this->hasOne(User::class, 'id', 'from_id')->with('photo');
     }
+
+    public function contest(){
+        return $this->hasOne(Contest::class, 'id', 'contest_id');
+    }
 }
