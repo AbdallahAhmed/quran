@@ -34,7 +34,7 @@ class NotificationController extends Controller
         } catch (InvalidOptionException $e) {
         }
         $this->notificationBuilder = new PayloadNotificationBuilder($this->title);
-        $this->notificationBuilder->setBody($this->body)->setSound('default')->setIcon('default');
+        $this->notificationBuilder->setBody($this->body)->setSound('default')->setIcon('default')->setBadge('badge');;
         $this->dataBuilder = new PayloadDataBuilder();
         $this->dataBuilder->addData([]);
     }
