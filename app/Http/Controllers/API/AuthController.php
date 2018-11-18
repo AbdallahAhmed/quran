@@ -155,6 +155,12 @@ class AuthController extends APIController
         return $this->response(['user' => ($user), 'token' => $user->api_token]);
     }
 
+    /**
+     * GET /auth/resendCode
+     */
+    public function logout(){
+        Token::where('user_id', fauth()->user()->id)->delete();
+    }
 
     /**
      * GET /auth/resendCode

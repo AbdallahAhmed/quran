@@ -42,6 +42,6 @@ class NewContestNotify
                 $notify->save();
            // }
         }
-        $notification->sendAll($users);
+        $notification->sendAll($users, "contest_winner");
     }
 }

@@ -32,8 +32,11 @@ class NotifyByWinner
     {
         $users_ids = ContestMember::where('contest_id', $event->contest->id)->pluck('member_id')->toArray();
         $tokens = array();
+        $api_tokens = array();
+
         foreach ($users_ids as $user_id){
             $devices = Token::where('user_id', $user_id)->get();
+            $api_tokens = User::find($user_id)->api_token;
             foreach ($devices as $device){
                 $tokens[] = $device->device_token;
             }
@@ -43,6 +46,6 @@ class NotifyByWinner
         $body = str_replace(":name", $event->contest->winner->name, trans('app.contest_winner'));
         $body = str_replace(":contest", $event->contest->name, $body);
         $notification = new NotificationController($title, $body);
-        $notification->sendGroup($tokens);
+        $notification->sendGroup($tokens, $api_tokens, "contest_winner");
     }
 }

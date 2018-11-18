@@ -62,13 +62,13 @@ class NotificationController extends Controller
         }
     }
 
-    public function sendAll($users)
+    public function sendAll($users, $type)
     {
         $api_tokens = array();
         foreach ($users as $user){
             $api_tokens[] = $user->api_token;
         }
-        $this->dataBuilder->addData(['type' => "contest_winner", 'users_tokens' => $api_tokens]);
+        $this->dataBuilder->addData(['type' => $type, 'users_tokens' => $api_tokens]);
         $tokens = Token::all();
         foreach ($tokens as $token) {
             $tokenToDelete = FCM::sendTo($token->device_token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
@@ -78,8 +78,9 @@ class NotificationController extends Controller
         }
     }
 
-    public function sendGroup($tokens)
+    public function sendGroup($tokens, $api_tokens, $type)
     {
+        $this->dataBuilder->addData(['type' => $type, 'users_tokens' => $api_tokens]);
         $tokenToDelete = FCM::sendTo($tokens, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
         foreach ($tokenToDelete->tokensToDelete as $td){
             Token::where('device_token', $td)->delete();

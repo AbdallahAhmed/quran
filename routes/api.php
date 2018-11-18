@@ -38,6 +38,9 @@ Route::get('/contests/details', 'API\ContestController@details');
 
 Route::group(["middleware" => ['api-auth']], function ($router) {
 
+    //logout to clear device token
+    $router->post('/logout', 'API\AuthController@logout');
+
     // profile
     $router->post('/profile/update', 'API\AuthController@update');
     $router->get('/profile/token_reset', 'API\AuthController@tokenReset');
