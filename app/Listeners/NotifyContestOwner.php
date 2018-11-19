@@ -35,6 +35,7 @@ class NotifyContestOwner
         $notify->user_id = $event->owner_id;
         $notify->type = "new_member_join_contest";
         $notify->from_id = fauth()->user()->id;
+        app()->setLocale(User::find($event->owner_id)->lang);
         if (count(Token::where('user_id', $event->owner_id)->get()) > 0) {
             $notification = new NotificationController(trans('app.new_join'), $join);
             $notification->sendUser(
