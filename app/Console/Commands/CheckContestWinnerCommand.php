@@ -50,6 +50,7 @@ class CheckContestWinnerCommand extends Command
                 }
                 $contest->notified = 1;
                 event(new ContestWinner($contest));
+                $contest->save();
             }
         }
     }
