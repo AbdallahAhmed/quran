@@ -260,11 +260,12 @@ class ContestController extends APIController
      */
     public function checkWinner($pages, $contest)
     {
-        $winner_pages = ContestMember::where([
+        $winner_pages = $contest->winner_id != 0 ?  ContestMember::where([
                 ['contest_id', $contest->id],
                 ['member_id', $contest->winner_id]
             ]
-        )->first()->pages;
+        )->first()->pages : "[]";
+
         $winner_pages = json_decode($winner_pages) ? json_decode($winner_pages) : [];
 
         if (count($winner_pages) < count($pages)) {

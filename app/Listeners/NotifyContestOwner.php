@@ -31,14 +31,18 @@ class NotifyContestOwner
     {
         $name = $event->user->name;
         $join = str_replace(":name", $name, trans('app.new_member_join_contest'));
-
         $notify = new Notificate();
         $notify->user_id = $event->owner_id;
         $notify->type = "new_member_join_contest";
         $notify->from_id = fauth()->user()->id;
         if (count(Token::where('user_id', $event->owner_id)->get()) > 0) {
             $notification = new NotificationController(trans('app.new_join'), $join);
-            $notification->sendUser(User::find(fauth()->user()->id));
+            $notification->sendUser(
+                fauth()->user(),
+                array(
+                    'type' => 'new_member_join_contest',
+                    'contest_id' => fauth()->user()->contest[0]->id)
+            );
         }
     }
 }

@@ -10,5 +10,5 @@ return [
     "contest_reminder" => "لقد قرأت :percentage من ':contest' و متبقي :remaining لانتهاء المسابقة",
     "contest_reminder_title" => "تذكير لانهاء المسابقة!",
     "contest_unread_reminder" => "أنت لم تبدء بالقراءة في ':contest' و متبقي :remaining لانتهاء المسابقة",
-    "contest_unread_reminder_title" => "تذكير لبداية فراءة المسابقة!"
+    "contest_unread_reminder_title" => "تذكير لبداية قراءة المسابقة!"
 ];

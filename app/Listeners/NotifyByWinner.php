@@ -33,7 +33,7 @@ class NotifyByWinner
         $users_ids = ContestMember::where('contest_id', $event->contest->id)->pluck('member_id')->toArray();
         foreach ($users_ids as $user_id) {
             $devices = Token::where('user_id', $user_id)->get();
-            if (count($devices) > 0) {
+            if (count($devices) > 0 && $event->contest->winner_id != 0) {
                 $device = $devices[0];
                 app()->setLocale($device->user->lang);
                 $title = trans('app.winner');

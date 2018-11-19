@@ -50,10 +50,10 @@ class NotificationController extends Controller
         return;
     }
 
-    public function sendUser($user)
+    public function sendUser($user, $array)
     {
 
-        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest[0]->id]);
+        $this->dataBuilder->addData(['type' => $array['type'], 'route' => 'contest', "contest_id" => $array['contest_id']]);
         $user = User::find(Contest::find($user->contest[0]->id)->user_id);
         foreach ($user->devices as $device) {
             $token = $device->device_token;
