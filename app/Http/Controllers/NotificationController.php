@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contest;
 use App\Models\Token;
 use App\User;
 use Illuminate\Http\Request;
@@ -51,7 +52,9 @@ class NotificationController extends Controller
 
     public function sendUser($user)
     {
-        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest->id]);
+
+        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest[0]->id]);
+        $user = User::find(Contest::find($user->contest[0]->id)->user_id);
         foreach ($user->devices as $device) {
             $token = $device->device_token;
             $tokenToDelete = FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
