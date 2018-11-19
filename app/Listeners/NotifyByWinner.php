@@ -25,27 +25,24 @@ class NotifyByWinner
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param  object $event
      * @return void
      */
     public function handle($event)
     {
         $users_ids = ContestMember::where('contest_id', $event->contest->id)->pluck('member_id')->toArray();
-        $tokens = array();
-        $api_tokens = array();
-
-        foreach ($users_ids as $user_id){
+        foreach ($users_ids as $user_id) {
             $devices = Token::where('user_id', $user_id)->get();
-            $api_tokens = User::find($user_id)->api_token;
-            foreach ($devices as $device){
-                $tokens[] = $device->device_token;
+            if (count($devices) > 0) {
+                $device = $devices[0];
+                app()->setLocale($device->user->lang);
+                $title = trans('app.winner');
+                $body = str_replace(":name", $event->contest->winner->name, trans('app.contest_winner'));
+                $body = str_replace(":contest", $event->contest->name, $body);
+                $notification = new NotificationController($title, $body);
+                $notification->send($device->device_token, array("type" => "contest_winner"));
             }
+
         }
-        app()->setLocale('ar');
-        $title = trans('app.winner');
-        $body = str_replace(":name", $event->contest->winner->name, trans('app.contest_winner'));
-        $body = str_replace(":contest", $event->contest->name, $body);
-        $notification = new NotificationController($title, $body);
-        $notification->sendGroup($tokens, $api_tokens, "contest_winner");
     }
 }

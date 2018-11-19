@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('contest:winner')->everyMinute();
+        $schedule->command('contest:winner')->everyMinute();
         $schedule->command('contest:reminder')->everyMinute();
     }
 

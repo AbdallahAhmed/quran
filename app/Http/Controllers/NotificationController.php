@@ -43,6 +43,8 @@ class NotificationController extends Controller
     {
         if($array['type'] == "contest_reminder")
             $this->dataBuilder->addData(['type' => $array['type'], "contest_id" => $array['contest_id']]);
+        else
+            $this->dataBuilder->addData(['type' => $array['type']]);
         FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
         return;
     }
@@ -59,15 +61,18 @@ class NotificationController extends Controller
         }
     }
 
-    public function sendAll($users, $type)
+    public function sendAll($users, $array)
     {
         $api_tokens = array();
         foreach ($users as $user){
             $api_tokens[] = $user->api_token;
         }
-        $this->dataBuilder->addData(['type' => $type, 'route' => 'contest', 'users_tokens' => $api_tokens]);
+        $this->dataBuilder->addData(['type' => $array['type'], 'route' => 'contest']);
         $tokens = Token::all();
         foreach ($tokens as $token) {
+            app()->setLocale($token->user->lang);
+            $this->title = trans('app.new_contest');
+            $this->body = str_replace(":contest", $array['contest_name'], trans('app.new_contest_content'));
             $tokenToDelete = FCM::sendTo($token->device_token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
             if ($tokenToDelete->tokensToDelete != null) {
                $token->delete();
@@ -75,9 +80,9 @@ class NotificationController extends Controller
         }
     }
 
-    public function sendGroup($tokens, $api_tokens, $type)
+    public function sendGroup($tokens, $type)
     {
-        $this->dataBuilder->addData(['type' => $type, 'route' => 'contest', 'users_tokens' => $api_tokens]);
+        $this->dataBuilder->addData(['type' => $type, 'route' => 'contest']);
         $tokenToDelete = FCM::sendTo($tokens, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
         foreach ($tokenToDelete->tokensToDelete as $td){
             Token::where('device_token', $td)->delete();

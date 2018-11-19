@@ -42,6 +42,7 @@ class NewContestNotify
                 $notify->save();
            // }
         }
-        $notification->sendAll($users, "contest_winner");
+
+        $notification->sendAll($users, array("type" => "contest_reminder", "contest_name" => $event->contest->name));
     }
 }

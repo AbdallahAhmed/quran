@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Events\ContestWinner;
+use App\Models\Contest;
 use App\Models\Juz;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -40,6 +42,9 @@ class CheckContestWinnerCommand extends Command
      */
     public function handle()
     {
-
+        $contests = Contest::opened()->get();
+        foreach ($contests as $contest) {
+            event(new ContestWinner($contest));
+        }
     }
 }
