@@ -42,12 +42,13 @@ class CheckContestWinnerCommand extends Command
      */
     public function handle()
     {
-        $contests = Contest::opened()->get();
+        $contests = Contest::opened()->where('notified', 0)->get();
         foreach ($contests as $contest) {
             if ($contest->closed_to_winner != 0 || ($contest->expired_at->diffInMinutes(\Carbon\Carbon::now()) == 0)) {
                 if ($contest->closed_to_winner == 0) {
                     $contest->closed_to_winner = $contest->winner_id;
                 }
+                $contest->notified = 1;
                 event(new ContestWinner($contest));
             }
         }
