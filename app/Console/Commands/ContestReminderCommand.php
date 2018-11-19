@@ -46,6 +46,7 @@ class ContestReminderCommand extends Command
         $users = User::whereHas('contest')->get();
         foreach ($users as $user) {
             if (count($user->devices) > 0) {
+                app()->setLocale($user->lang);
                 $contest = $user->contest[0];
                 $expired_at = $contest->expired_at;
                 $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
@@ -57,14 +58,13 @@ class ContestReminderCommand extends Command
                     if (count($user_pages) > 0) {
                         $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
                         $this->notify($user, $contest, $read_percentage, $contest_remaining);
-                    }else{
-                        app()->setLocale($user->lang);
-                        $title = trans("app.contest_reminder_unread_title");
+                    } else {
+                        $title = trans("app.contest_unread_reminder_title");
                         $body = str_replace(":remaining", remaining_time_human($contest_remaining), trans("app.contest_unread_reminder"));
                         $body = str_replace(":contest", $contest->name, $body);
                         $notification = new NotificationController($title, $body);
                         $array = array(
-                            "type" => "contest_reminder",
+                            "type" => "contest_unread_reminder",
                             "contest_id" => $contest->id
                         );
                         $notification->send($user->devices[0]->device_token, $array);
@@ -77,7 +77,6 @@ class ContestReminderCommand extends Command
 
     public function notify($user, $contest, $read, $time_remaining)
     {
-        app()->setLocale($user->lang);
         $title = trans("app.contest_reminder_title");
         $body = str_replace(":remaining", remaining_time_human($time_remaining), trans("app.contest_reminder"));
         $body = str_replace(":contest", $contest->name, $body);
