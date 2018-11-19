@@ -56,7 +56,8 @@ class ContestReminderCommand extends Command
                 $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
                 $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
                 $this->notify($user, $contest, $read_percentage, $contest_remaining);
-                }
+
+                 }
             }
         }
     }
