@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Http\Controllers\NotificationController;
 use App\Models\Notificate;
+use App\Models\Token;
 use App\User;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,8 +37,9 @@ class NotifyContestOwner
         $notify->type = "new_member_join_contest";
         $notify->from_id = fauth()->user()->id;
         $notify->save();
-
-        $notification = new NotificationController(trans('app.new_join'), $join);
-        $notification->sendUser(User::find($event->owner_id));
+        if ((Token::where('user_id', $event->owner_id)->get()) > 0) {
+            $notification = new NotificationController(trans('app.new_join'), $join);
+            $notification->sendUser(User::find($event->owner_id));
+        }
     }
 }

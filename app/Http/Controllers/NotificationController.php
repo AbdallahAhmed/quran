@@ -51,7 +51,7 @@ class NotificationController extends Controller
 
     public function sendUser($user)
     {
-        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest->id, 'user_token' => $user->api_token]);
+        $this->dataBuilder->addData(['type' => "new_member_join_contest", 'route' => 'contest', "contest_id" => $user->contest->id]);
         foreach ($user->devices as $device) {
             $token = $device->device_token;
             $tokenToDelete = FCM::sendTo($token, $this->optionBuilder->build(), $this->notificationBuilder->build(), $this->dataBuilder->build());
