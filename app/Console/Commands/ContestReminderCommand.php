@@ -45,32 +45,34 @@ class ContestReminderCommand extends Command
 
         $users = User::whereHas('contest')->get();
         foreach ($users as $user) {
-            $contest = $user->contest[0];
-            $expired_at = $contest->expired_at;
-            $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
-            $contest_all = $expired_at->diffInMinutes($contest->start_at);
-            $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
-            // if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
-            $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
-            $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
-            $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
-            $this->notify($user, $contest, $read_percentage, $contest_remaining);
-            //}
+            if (count($user->devices) > 0) {
+                $contest = $user->contest[0];
+                $expired_at = $contest->expired_at;
+                $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
+                $contest_all = $expired_at->diffInMinutes($contest->start_at);
+                $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
+                // if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
+                $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
+                $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
+                $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
+                $this->notify($user, $contest, $read_percentage, $contest_remaining);
+                //}
+            }
         }
     }
 
-    public function notify($user,$contest, $read, $time_remaining){
+    public function notify($user, $contest, $read, $time_remaining)
+    {
         app()->setLocale($user->lang);
         $title = trans("app.contest_reminder_title");
         $body = str_replace(":remaining", remaining_time_human($time_remaining), trans("app.contest_reminder"));
         $body = str_replace(":contest", $contest->name, $body);
-        $body = str_replace(":percentage", $read.'%', $body);
+        $body = str_replace(":percentage", $read . '%', $body);
         $notification = new NotificationController($title, $body);
         $array = array(
-           "type" => "contest_reminder",
-           "contest_id" => $contest->id
+            "type" => "contest_reminder",
+            "contest_id" => $contest->id
         );
-        if(count($user->devices) > 0)
-            $notification->send($user->devices[0]->device_token, $array);
+        $notification->send($user->devices[0]->device_token, $array);
     }
 }

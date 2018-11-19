@@ -160,6 +160,14 @@ class AuthController extends APIController
     }
 
     /**
+     * POST /auth/lang
+     */
+    public function changeLang(Request $request){
+        $user = fauth()->user();
+        $user->lang = $request->get('lang');
+    }
+
+    /**
      * GET /auth/resendCode
      */
     public function resendCode()

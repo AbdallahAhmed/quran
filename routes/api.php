@@ -55,6 +55,7 @@ Route::group(["middleware" => ['api-auth']], function ($router) {
 
     //logout to clear device token
     $router->post('/logout', 'API\AuthController@logout');
+    $router->post('/lang', 'API\AuthController@changeLang');
 
     // profile
     $router->post('/profile/update', 'API\AuthController@update');
