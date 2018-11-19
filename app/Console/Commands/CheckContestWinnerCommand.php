@@ -44,7 +44,8 @@ class CheckContestWinnerCommand extends Command
     {
         $contests = Contest::opened()->get();
         foreach ($contests as $contest) {
-            event(new ContestWinner($contest));
+            if($contest->closed_to_winner != 0)
+                event(new ContestWinner($contest));
         }
     }
 }
