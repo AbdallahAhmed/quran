@@ -44,8 +44,12 @@ class CheckContestWinnerCommand extends Command
     {
         $contests = Contest::opened()->get();
         foreach ($contests as $contest) {
-            if($contest->closed_to_winner != 0)
+            if ($contest->closed_to_winner != 0 || ($contest->expired_at->diffInMinutes(\Carbon\Carbon::now()) == 0)) {
+                if ($contest->closed_to_winner == 0) {
+                    $contest->closed_to_winner = $contest->winner_id;
+                }
                 event(new ContestWinner($contest));
+            }
         }
     }
 }
