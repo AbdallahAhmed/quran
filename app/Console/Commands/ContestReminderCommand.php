@@ -51,13 +51,26 @@ class ContestReminderCommand extends Command
                 $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
                 $contest_all = $expired_at->diffInMinutes($contest->start_at);
                 $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
-                 if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
-                $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
-                $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
-                $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
-                $this->notify($user, $contest, $read_percentage, $contest_remaining);
+                if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
+                    $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
+                    $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
+                    if (count($user_pages) > 0) {
+                        $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;
+                        $this->notify($user, $contest, $read_percentage, $contest_remaining);
+                    }else{
+                        app()->setLocale($user->lang);
+                        $title = trans("app.contest_reminder_unread_title");
+                        $body = str_replace(":remaining", remaining_time_human($contest_remaining), trans("app.contest_unread_reminder"));
+                        $body = str_replace(":contest", $contest->name, $body);
+                        $notification = new NotificationController($title, $body);
+                        $array = array(
+                            "type" => "contest_reminder",
+                            "contest_id" => $contest->id
+                        );
+                        $notification->send($user->devices[0]->device_token, $array);
+                    }
 
-                 }
+                }
             }
         }
     }

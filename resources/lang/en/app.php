@@ -8,5 +8,7 @@ return [
     "contest_winner" => "The winner in :contest is :name - It is these who hasten in every good work, and those who are foremost in them.",
     "winner" => "New Contest Winner",
     "contest_reminder" => "You have been read :percentage of :contest . And :remaining is remaining to close the contest",
-    "contest_reminder_title" => "Reminder to recite for contest!"
+    "contest_reminder_title" => "Reminder to recite for contest!",
+    "contest_unread_reminder" => "You didn't begin reading in :contest . And :remaining is remaining to close the contest",
+    "contest_unread_reminder_title" => "Reminder to begin reading for the contest!"
 ];

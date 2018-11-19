@@ -42,7 +42,7 @@ class NotificationController extends Controller
 
     public function send($token, $array)
     {
-        if($array['type'] == "contest_reminder")
+        if($array['type'] == "contest_reminder" || $array['type'] == "contest_unread_reminder")
             $this->dataBuilder->addData(['type' => $array['type'], "contest_id" => $array['contest_id']]);
         else
             $this->dataBuilder->addData(['type' => $array['type']]);
