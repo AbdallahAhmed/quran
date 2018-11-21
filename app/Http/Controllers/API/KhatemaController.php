@@ -52,7 +52,7 @@ class KhatemaController extends APIController
     }
 
     /**
-     * GET /khatemas/update
+     * POST /khatemas/update
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -69,16 +69,18 @@ class KhatemaController extends APIController
 
 
         if ($request->filled('page_id')) {
-            $pages[] = $request->get('page_id');
-            $pages = array_unique($pages);
+            $pages[] = ['page_id' => $request->get('page_id'), 'time' => $request->get('time')];
+
+            $pages = collect($pages)->unique('page_id')->toArray();
         }
 
         $pages = $pages ? $pages : [];
-        $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', [])) : [];
 
+        $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', []), true) : [];
 
         if ($request->filled('pages')) {
-            $pages = array_unique(array_merge($pages, $new_pages));
+            $pages = (array_merge($pages, $new_pages));
+            $pages = collect($pages)->unique('page_id')->toArray();
         }
 
         if ($request->filled('completed') || count($pages) >= 604) {
