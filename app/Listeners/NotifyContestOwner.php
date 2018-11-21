@@ -39,10 +39,11 @@ class NotifyContestOwner
         if (count(Token::where('user_id', $event->owner_id)->get()) > 0) {
             $notification = new NotificationController(trans('app.new_join'), $join);
             $notification->sendUser(
-                fauth()->user(),
+                User::find($event->owner_id),
                 array(
                     'type' => 'new_member_join_contest',
-                    'contest_id' => fauth()->user()->contest[0]->id)
+                    'owner_id' => $event->owner_id
+                )
             );
         }
     }

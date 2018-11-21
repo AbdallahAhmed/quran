@@ -48,12 +48,17 @@ class ContestReminderCommand extends Command
             if (count($user->devices) > 0) {
                 app()->setLocale($user->lang);
                 $contest = $user->contest[0];
+                $contest_pages = array();
                 $expired_at = $contest->expired_at;
                 $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
                 $contest_all = $expired_at->diffInMinutes($contest->start_at);
                 $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
                 if ($contest_precentage == 15 or $contest_precentage == 50 or $contest_precentage == 75) {
-                    $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
+                    if ($contest->type == "juz")
+                        $contest_pages = get_contest_pages($contest->juz_from, $contest->juz_to);
+                    else {
+                        $contest_pages = array_values(array_unique($contest->pages));
+                    }
                     $user_pages = json_decode($contest->pivot->pages ? $contest->pivot->pages : '[]');
                     if (count($user_pages) > 0) {
                         $read_percentage = count($user_pages) > 0 ? (int)((count($user_pages) / count($contest_pages) * 100)) : 0;

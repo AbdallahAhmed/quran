@@ -45,10 +45,13 @@ class ContestController extends APIController
             'user_id' => fauth()->id(),
             'juz_from' => $request->get('juz_from'),
             'juz_to' => $request->get('juz_to'),
+            'type' => $request->get('type')
         ]);
 
         event(new ContestCreated($contest));
-
+        if($contest->type == "surat"){
+            $contest->surat()->sync($request->get("surat"));
+        }
         $contest->load(['creator', 'winner']);
 
         ContestMember::create([
@@ -272,13 +275,17 @@ class ContestController extends APIController
             $juz_from = (int)$contest->juz_from;
             $juz_to = (int)$contest->juz_to;
             $contest_pages = array();
-            $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
-            foreach ($juz_pages as $key => $value) {
-                if ($key >= $juz_from && $key <= $juz_to) {
-                    $contest_pages = array_merge($contest_pages, $value);
-                }
+            if($contest->type == "juz"){
+               /* $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+                foreach ($juz_pages as $key => $value) {
+                    if ($key >= $juz_from && $key <= $juz_to) {
+                        $contest_pages = array_merge($contest_pages, $value);
+                    }
+                }*/
+                $contest_pages = get_contest_pages($juz_from, $juz_to);//array_unique($contest_pages);
+            }else{
+                $contest_pages = array_values(array_unique($contest->pages));
             }
-            $contest_pages = array_unique($contest_pages);
             sort($contest_pages);
             sort($pages);
 

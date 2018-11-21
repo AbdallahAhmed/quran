@@ -28,7 +28,7 @@ class Surat extends Model
      *
      * @var array
      */
-    protected $appends=['page_id'];
+    //protected $appends=['page_id', 'pages'];
 
 
     /**
@@ -39,6 +39,9 @@ class Surat extends Model
         return $this->hasMany(Ayat::class, 'surat_id', 'id');
     }
 
+    public function getPagesAttribute(){
+        return $this->ayat()->get()->groupBy('page_id')->keys()->toArray();
+    }
     /**
      * @return mixed
      */

@@ -34,7 +34,7 @@ class Contest extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'goal', 'user_id', 'expired_at', 'start_at','juz_from','juz_to', 'closed_to_winner'
+        'name', 'goal', 'user_id', 'expired_at', 'start_at','juz_from','juz_to', 'closed_to_winner', "type"
     ];
 
 
@@ -141,6 +141,26 @@ class Contest extends Model
     public function getRemainingTimeAttribute()
     {
         return $this->start_at->diffInHours($this->expired_at) . ':' . $this->start_at->diff($this->expired_at)->format('%I:%S');
+    }
+
+    /**
+     * surat relations
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function surat(){
+        return $this->belongsToMany(Surat::class, 'contests_surat', 'contest_id', 'surah_id');
+    }
+
+    public function getPagesAttribute(){
+        $pages = array();
+        $surat = $this->surat()->get();
+
+        if (count($surat) > 0){
+            foreach ($surat as $surah){
+                $pages = array_merge($pages, $surah->pages);
+            }
+        }
+        return $pages;
     }
 
 }

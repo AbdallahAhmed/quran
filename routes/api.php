@@ -31,14 +31,11 @@ Route::get('/JuzAll', 'API\JuzController@JuzAll');
 Route::get('/juz', 'API\JuzController@index');
 Route::get('/juz/sections', 'API\JuzController@sections');
 
-/*Route::get('/sas', function () {
-        $contest = \App\Models\Contest::find(64);
-        $expired_at = $contest->expired_at;
-        $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
-        $contest_all = $expired_at->diffInMinutes($contest->start_at);
-        $contest_precentage = (($contest_remaining / $contest_all) * 100);
-        dd($contest_remaining);
-});*/
+Route::get('/surat', function () {
+    $surat = \App\Models\Surat::select(['id', 'name', 'englishname'])->get()->toArray();
+    return response()->json($surat);
+   // file_put_contents('surat.json', json_encode($surat));
+});
 
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
