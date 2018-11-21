@@ -28,7 +28,7 @@ class Surat extends Model
      *
      * @var array
      */
-    //protected $appends=['page_id', 'pages'];
+    protected $appends=['page_id', 'pages'];
 
 
     /**
