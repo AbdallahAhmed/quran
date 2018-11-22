@@ -28,7 +28,7 @@ class Surat extends Model
      *
      * @var array
      */
-    protected $appends=['page_id', 'pages'];
+    protected $appends=['page_id', 'pages_per_surah'];
 
 
     /**
@@ -39,7 +39,7 @@ class Surat extends Model
         return $this->hasMany(Ayat::class, 'surat_id', 'id');
     }
 
-    public function getPagesAttribute(){
+    public function getPagesPerSurahAttribute(){
         return $this->ayat()->get()->groupBy('page_id')->keys()->toArray();
     }
     /**

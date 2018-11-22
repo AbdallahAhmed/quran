@@ -157,7 +157,7 @@ class Contest extends Model
 
         if (count($surat) > 0){
             foreach ($surat as $surah){
-                $pages = array_merge($pages, $surah->pages);
+                $pages = array_merge($pages, $surah->pages_per_surah);
             }
         }
         return $pages;

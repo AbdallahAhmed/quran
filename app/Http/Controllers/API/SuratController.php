@@ -40,4 +40,6 @@ class SuratController extends APIController
         return $this->errorResponse('Surah not found');
 
     }
+
+
 }
