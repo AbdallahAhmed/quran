@@ -76,7 +76,7 @@ class KhatemaController extends APIController
 
         $pages = $pages ? $pages : [];
 
-        $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', []), true) : [];
+        $new_pages = $request->get('pages', []) ? json_decode($request->get('pages', "[]"), true) : [];
 
         if ($request->filled('pages')) {
             $pages = (array_merge($pages, $new_pages));
