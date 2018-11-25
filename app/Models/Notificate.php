@@ -13,10 +13,17 @@ class Notificate extends Model
 
     public function getMessageAttribute(){
         $type = $this->type;
+        $message = array();
         if($type == "new_contest_content"){
-            return str_replace(":contest", $this->contest->name,trans('app.'.$type));
+            $message["en"] = trans('app.'.$type, [':contest' => $this->contest->name], "ar");
+            $message["ar"] = trans('app.'.$type, [':contest' => $this->contest->name], "en");
+            return $message;
+            //return str_replace(":contest", $this->contest->name,trans('app.'.$type));
         }elseif ($type == "new_member_join_contest"){
-            return str_replace(":name", User::find($this->from_id)->name, trans('app.'.$type));
+            $message["en"] = trans('app.'.$type, [':name' => User::find($this->from_id)->name], "en");
+            $message["ar"] = trans('app.'.$type, [':name' => User::find($this->from_id)->name], "ar");
+            return $message;
+            //return str_replace(":name", User::find($this->from_id)->name, trans('app.'.$type));
         }
     }
 
