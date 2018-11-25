@@ -50,7 +50,7 @@ class ContestReminderCommand extends Command
                 $contest = $user->contest[0];
                 $contest_pages = array();
                 $expired_at = $contest->expired_at;
-                $contest_remaining = $expired_at->diffInMinutes(\Carbon\Carbon::now());
+                $contest_remaining = \Carbon\Carbon::now()->diffInMinutes($expired_at);
                 $contest_all = $expired_at->diffInMinutes($contest->start_at);
                 $contest_precentage = (int)(($contest_remaining / $contest_all) * 100);
                 if (

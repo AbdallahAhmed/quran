@@ -21,10 +21,12 @@ class ContestJoin
      */
     public $user;
     public $owner_id;
-    public function __construct($user, $owner_id)
+    public $contest_id;
+    public function __construct($user, $owner_id, $contest_id)
     {
         $this->user = $user;
         $this->owner_id = $owner_id;
+        $this->contest_id = $contest_id;
     }
 
 }

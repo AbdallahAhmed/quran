@@ -100,7 +100,7 @@ class ContestController extends APIController
             'contest_id' => $request->get('contest_id'),
             'member_id' => fauth()->id()
         ]);
-        event(new ContestJoin(fauth()->user(), $contest->user_id));
+        event(new ContestJoin(fauth()->user(), $contest->user_id, $contest->id));
 
         return $this->response('You join to contest successfully');
     }

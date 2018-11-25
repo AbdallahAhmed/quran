@@ -33,6 +33,7 @@ class NotifyContestOwner
         $join = str_replace(":name", $name, trans('app.new_member_join_contest'));
         $notify = new Notificate();
         $notify->user_id = $event->owner_id;
+        $notify->contest_id = $event->contest_id;
         $notify->type = "new_member_join_contest";
         $notify->from_id = fauth()->user()->id;
         app()->setLocale(User::find($event->owner_id)->lang);
