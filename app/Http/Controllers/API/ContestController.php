@@ -49,7 +49,7 @@ class ContestController extends APIController
         ]);
 
         event(new ContestCreated($contest));
-        if($contest->type == "surah"){
+        if ($contest->type == "surah") {
             $contest->surat()->sync($request->get("surah"));
         }
         $contest->load(['creator', 'winner']);
@@ -70,7 +70,7 @@ class ContestController extends APIController
      */
     public function join(Request $request)
     {
-       // app()->setLocale($request->get('lang'));
+        // app()->setLocale($request->get('lang'));
 
 
         $validator = Validator::make($request->all(), [
@@ -191,8 +191,7 @@ class ContestController extends APIController
     public function details(Request $request)
     {
         $contest = Contest::with(['creator', 'winner', 'members'])->where('id', $request->query('contest_id'))->first();
-        if($contest->type == "surah")
-            $contest->load('surat');
+        $contest->load('surat');
         if (!$contest) {
             return $this->errorResponse(['Contest not founded'], 404);
         }
@@ -265,7 +264,7 @@ class ContestController extends APIController
      */
     public function checkWinner($pages, $contest)
     {
-        $winner_pages = $contest->winner_id != 0 ?  ContestMember::where([
+        $winner_pages = $contest->winner_id != 0 ? ContestMember::where([
                 ['contest_id', $contest->id],
                 ['member_id', $contest->winner_id]
             ]
@@ -277,15 +276,15 @@ class ContestController extends APIController
             $juz_from = (int)$contest->juz_from;
             $juz_to = (int)$contest->juz_to;
             $contest_pages = array();
-            if($contest->type == "juz"){
-               /* $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
-                foreach ($juz_pages as $key => $value) {
-                    if ($key >= $juz_from && $key <= $juz_to) {
-                        $contest_pages = array_merge($contest_pages, $value);
-                    }
-                }*/
+            if ($contest->type == "juz") {
+                /* $juz_pages = json_decode(file_get_contents(public_path('api/juz_pages.json')));
+                 foreach ($juz_pages as $key => $value) {
+                     if ($key >= $juz_from && $key <= $juz_to) {
+                         $contest_pages = array_merge($contest_pages, $value);
+                     }
+                 }*/
                 $contest_pages = get_contest_pages($juz_from, $juz_to);//array_unique($contest_pages);
-            }else{
+            } else {
                 $contest_pages = array_values(array_unique($contest->pages));
             }
             sort($contest_pages);
@@ -297,7 +296,7 @@ class ContestController extends APIController
                     'closed_to_winner' => 1
                 ]);
                 event(new ContestWinner($contest));
-            }else{
+            } else {
                 Contest::where('id', $contest->id)->update([
                     'winner_id' => fauth()->user()->id,
                 ]);
