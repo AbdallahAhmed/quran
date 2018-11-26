@@ -153,12 +153,15 @@ class Contest extends Model
 
     public function getPagesAttribute(){
         $pages = array();
-        $surat = $this->surat()->get();
-
-        if (count($surat) > 0){
-            foreach ($surat as $surah){
-                $pages = array_merge($pages, $surah->pages_per_surah);
+        if($this->type == "surah") {
+            $surat = $this->surat()->get();
+            if (count($surat) > 0) {
+                foreach ($surat as $surah) {
+                    $pages = array_merge($pages, $surah->pages_per_surah);
+                }
             }
+        }else{
+            $pages = get_contest_pages($this->juz_from, $this->juz_to);
         }
         return $pages;
     }

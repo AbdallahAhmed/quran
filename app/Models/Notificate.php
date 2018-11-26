@@ -15,13 +15,15 @@ class Notificate extends Model
         $type = $this->type;
         $message = array();
         if($type == "new_contest_content"){
-            $message["en"] = trans('app.'.$type, [':contest' => $this->contest->name], "ar");
-            $message["ar"] = trans('app.'.$type, [':contest' => $this->contest->name], "en");
+            $contest = $this->contest->name;
+            $message["en"] = str_replace(':contest', $contest,trans('app.'.$type, [':contest' => $contest], "en"));
+            $message["ar"] = str_replace(':contest', $contest,trans('app.'.$type, [':contest' => $contest], "ar"));
             return $message;
             //return str_replace(":contest", $this->contest->name,trans('app.'.$type));
         }elseif ($type == "new_member_join_contest"){
-            $message["en"] = trans('app.'.$type, [':name' => User::find($this->from_id)->name], "en");
-            $message["ar"] = trans('app.'.$type, [':name' => User::find($this->from_id)->name], "ar");
+            $username = User::find($this->from_id)->name;
+            $message["en"] = str_replace(':name', $username, trans('app.'.$type, [], "en"));
+            $message["ar"] = str_replace(':name', $username, trans('app.'.$type, [], "ar"));
             return $message;
             //return str_replace(":name", User::find($this->from_id)->name, trans('app.'.$type));
         }

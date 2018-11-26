@@ -191,6 +191,8 @@ class ContestController extends APIController
     public function details(Request $request)
     {
         $contest = Contest::with(['creator', 'winner', 'members'])->where('id', $request->query('contest_id'))->first();
+        if($contest->type == "surah")
+            $contest->load('surat');
         if (!$contest) {
             return $this->errorResponse(['Contest not founded'], 404);
         }
