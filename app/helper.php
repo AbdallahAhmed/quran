@@ -58,6 +58,15 @@ if (!function_exists('get_contest_pages')) {
         return array_unique($contest_pages);
     }
 }
+if (!function_exists('get_contest_surat')) {
+    function get_contest_surat($juz_from, $juz_to)
+    {
+        $surat = array();
+        for($i = $juz_from; $i >= $juz_to; $i--){
+            $surat = array_merge($surat, (\App\Models\Juz::find($i)->surat()->toArray()));
+        }
+    }
+}
 
 if (!function_exists('remaining_time_human')) {
     function remaining_time_human($minutes)
