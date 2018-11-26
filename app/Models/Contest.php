@@ -34,7 +34,7 @@ class Contest extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'goal', 'user_id', 'expired_at', 'start_at','juz_from','juz_to', 'closed_to_winner', "type"
+        'name', 'goal', 'user_id', 'expired_at', 'start_at', 'juz_from', 'juz_to', 'closed_to_winner', "type"
     ];
 
 
@@ -131,7 +131,7 @@ class Contest extends Model
      */
     public function members()
     {
-        return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id')->withPivot(['join_at','pages']);
+        return $this->belongsToMany(User::class, 'contests_members', 'contest_id', 'member_id')->withPivot(['join_at', 'pages']);
     }
 
     /**
@@ -147,26 +147,27 @@ class Contest extends Model
      * surat relations
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function surat(){
-        if($this->type == "surah"){
-            return $this->belongsToMany(Surat::class, 'contests_surat', 'contest_id', 'surah_id');
-        }
+    public function surat()
+    {
+        return $this->belongsToMany(Surat::class, 'contests_surat', 'contest_id', 'surah_id');
     }
 
-    public function getSuratJuzAttribute(){
+    public function getSuratJuzAttribute()
+    {
         return get_contest_surat($this->juz_from, $this->juz_to);
     }
 
-    public function getPagesAttribute(){
+    public function getPagesAttribute()
+    {
         $pages = array();
-        if($this->type == "surah") {
+        if ($this->type == "surah") {
             $surat = $this->surat()->get();
             if (count($surat) > 0) {
                 foreach ($surat as $surah) {
                     $pages = array_merge($pages, $surah->pages_per_surah);
                 }
             }
-        }else{
+        } else {
             $pages = get_contest_pages($this->juz_from, $this->juz_to);
         }
         return $pages;
