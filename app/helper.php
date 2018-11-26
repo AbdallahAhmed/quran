@@ -63,8 +63,9 @@ if (!function_exists('get_contest_surat')) {
     {
         $surat = array();
         for($i = $juz_from; $i <= $juz_to; $i++){
-            $surat = array_merge($surat, (\App\Models\Juz::find($i)->surat()->toArray()));
+            $surat = array_merge($surat, (\App\Models\Juz::find($i)->surat()->get()->toArray()));
         }
+        return $surat;
     }
 }
 
