@@ -150,9 +150,11 @@ class Contest extends Model
     public function surat(){
         if($this->type == "surah"){
             return $this->belongsToMany(Surat::class, 'contests_surat', 'contest_id', 'surah_id');
-        }else{
-            return get_contest_surat($this->juz_from, $this->juz_to);
         }
+    }
+
+    public function getSuratJuzAttribute(){
+        return get_contest_surat($this->juz_from, $this->juz_to);
     }
 
     public function getPagesAttribute(){
