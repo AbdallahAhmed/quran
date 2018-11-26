@@ -36,7 +36,10 @@ Route::get('/surat', function () {
     return response()->json($surat);
    // file_put_contents('surat.json', json_encode($surat));
 });
-
+Route::get('send', function (){
+   $notify = new \App\Http\Controllers\NotificationController("sss", "ssss");
+   $notify->send("dCvrvQxy95c:APA91bG8eyS-xKI9uP3u4AKEsDTZd6j2DhIwnj-9Fgw1T_IHsXJRqFrWbF-spvbG_iFFdOOSo31L1Tlfqmk5etQqQyrmOuudBwjM88XMyydW7T_fD5ArJ1TV4YpdVD4BzAIYeY1yXdvx", []);
+});
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
