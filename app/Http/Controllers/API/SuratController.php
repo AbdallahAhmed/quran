@@ -41,5 +41,10 @@ class SuratController extends APIController
 
     }
 
+    public function all(){
+        $surat = Surat::select(['id', 'name', 'englishname'])->get()->toArray();
+        return response()->json($surat);
+    }
+
 
 }

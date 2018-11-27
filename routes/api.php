@@ -27,19 +27,11 @@ Route::get('/page', 'API\PageController@index');
 Route::get('/ayah', 'API\AyatController@index');
 Route::get('/search', 'API\AyatController@search');
 Route::get('/surah', 'API\SuratController@index');
+Route::get('/surat', 'API\SuratController@all');
 Route::get('/JuzAll', 'API\JuzController@JuzAll');
 Route::get('/juz', 'API\JuzController@index');
 Route::get('/juz/sections', 'API\JuzController@sections');
 
-Route::get('/surat', function () {
-    $surat = \App\Models\Surat::select(['id', 'name', 'englishname'])->get()->toArray();
-    return response()->json($surat);
-   // file_put_contents('surat.json', json_encode($surat));
-});
-Route::get('send', function (){
-   $notify = new \App\Http\Controllers\NotificationController("sss", "ssss");
-   $notify->send("dCvrvQxy95c:APA91bG8eyS-xKI9uP3u4AKEsDTZd6j2DhIwnj-9Fgw1T_IHsXJRqFrWbF-spvbG_iFFdOOSo31L1Tlfqmk5etQqQyrmOuudBwjM88XMyydW7T_fD5ArJ1TV4YpdVD4BzAIYeY1yXdvx", []);
-});
 Route::get('/contests', 'API\ContestController@index');
 Route::get('/contests/details', 'API\ContestController@details');
 
