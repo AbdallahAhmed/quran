@@ -50,7 +50,7 @@ class ContestController extends APIController
 
         event(new ContestCreated($contest));
         if($contest->type == "surah"){
-            $contest->surat()->sync($request->get("surah"));
+            $contest->surat()->sync($request->get("surat"));
         }
         $contest->load(['creator', 'winner']);
 
